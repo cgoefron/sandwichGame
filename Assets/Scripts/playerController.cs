@@ -57,21 +57,25 @@ public class playerController : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other){
 
+		print ("trigger entered");
+
+
 		if (other.tag == "Food") {
 			nearFood = true;
 
-			if (other.GetComponent<playerController> ().player.GetButton ("Action1") && hasFood == false) {
-				//print ("stunned!");
+			if (GetComponent<playerController> ().player.GetButton ("Action1") && hasFood == false) {
+				print ("button pressed and has food");
 				//audio.PlayOneShot (pickupFood);
 				hasFood = true;
 				//food attaches to hand
 				other.transform.parent = transform;
+				//disable colliders or hand while moving food?
 
 
 			}
 
-			if (other.GetComponent<playerController> ().player.GetButtonUp ("Action1") && hasFood == true) {
-				//print ("stunned!");
+			if (GetComponent<playerController> ().player.GetButtonUp ("Action1") && hasFood == true) {
+				print ("button pressed and dropped food");
 				//audio.PlayOneShot (pickupFood);
 				hasFood = false;
 				//food is let go

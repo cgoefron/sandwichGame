@@ -12,4 +12,16 @@ public class boundaryScript : MonoBehaviour {
 	void Update () {
 	
 	}
+
+	void onTriggerEnter(Collider other){
+
+		print ("object entered");
+
+		if (other.tag == "Food") {
+			print ("food entered");
+
+			Destroy(other.gameObject);
+		}
+		
+	}
 }
