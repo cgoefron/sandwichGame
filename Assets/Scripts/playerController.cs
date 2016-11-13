@@ -11,6 +11,11 @@ public class playerController : MonoBehaviour {
 	private bool hasFood = false;
 	public bool nearFood = false;
 
+	private float speed;
+	//private float RotationSpeed = 1.5f;
+	private float xSpeed;
+	private float ySpeed;
+
 	//public AudioClip pickupFood;
 	//public AudioClip dropFoodTable;
 	//public AudioClip dropFoodFloor;
@@ -27,7 +32,7 @@ public class playerController : MonoBehaviour {
 
 	void Start () {
 		rb = GetComponent<Rigidbody> ();
-
+		speed = 5f;
 		//audio = GetComponent<AudioSource>();
 
 	}
@@ -35,39 +40,47 @@ public class playerController : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
 
-		Vector2 move = new Vector2 (player.GetAxis ("HorizontalMove"), player.GetAxis ("VerticalMove")) * moveSpeed;
+		Vector2 move = new Vector2 (player.GetAxis ("Horizontal"), player.GetAxis ("Vertical")) * moveSpeed;
 		Vector3 movement = new Vector3 (move.x, rb.velocity.y, move.y);
 		rb.velocity = movement;
 
 
-		if (move.x != 0 || move.y != 0) {
-			//audio.Play(walkIndoors);
-
-			//play walk sound; change based on outdoor/indoor?
-
-		}
+//		if (move.x != 0 || move.y != 0) {
+//			//audio.Play(walkIndoors);
+//
+//			//play walk sound; change based on outdoor/indoor?
+//
+//		}
 			
 	}
 		
 
 	void OnTriggerEnter(Collider other){
 
+		print ("trigger entered");
+
+
 		if (other.tag == "Food") {
 			nearFood = true;
 
-			if (other.GetComponent<playerController> ().player.GetButton ("Action1") && hasFood == false) {
-				//print ("stunned!");
+			if (GetComponent<playerController> ().player.GetButton ("Action1") && hasFood == false) {
+				print ("button pressed and has food");
 				//audio.PlayOneShot (pickupFood);
 				hasFood = true;
 				//food attaches to hand
+				other.transform.parent = transform;
+				//disable colliders or hand while moving food?
+
 
 			}
 
-			if (other.GetComponent<playerController> ().player.GetButtonUp ("Action1") && hasFood == true) {
-				//print ("stunned!");
+			if (GetComponent<playerController> ().player.GetButtonUp ("Action1") && hasFood == true) {
+				print ("button pressed and dropped food");
 				//audio.PlayOneShot (pickupFood);
 				hasFood = false;
 				//food is let go
+				other.transform.parent = null;
+
 			}
 		}
 		
@@ -90,27 +103,18 @@ public class playerController : MonoBehaviour {
 		if (other.tag == "Food") {
 			nearFood = false;
 
-}
+		}
+	}
 
-//		private float speed;
-//		private float RotationSpeed = 1.5f;
-//		private float xSpeed;
-//		private float ySpeed;
-//
-//
-//		void Start () {
-//
-//			speed = 5f;
-//
-//		}
-//
-//		void Update () {
-//			xSpeed = Input.GetAxis("Vertical") * speed * Time.deltaTime; //constrain height
-//
-//			ySpeed = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
-//
-//			transform.Translate(Vector3.left * -xSpeed);
-//			transform.Translate (Vector3.forward * ySpeed);
+
+
+	void Update () {
+//		xSpeed = Input.GetAxis("Vertical") * speed * Time.deltaTime; //constrain height
+////
+//		ySpeed = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
+////
+//		transform.Translate(Vector3.left * -xSpeed);
+//		transform.Translate (Vector3.forward * ySpeed);
 
 			/*transform.Rotate(0, (Input.GetAxis("Mouse X") * RotationSpeed),0, Space.World);
 			transform.Rotate( (Input.GetAxis("Mouse Y") * RotationSpeed),0,0, Space.World);
@@ -124,6 +128,7 @@ public class playerController : MonoBehaviour {
 				// re-introduce Y rotation
 				transform.Rotate(0,0,0); */
 			}
+
 
 
 		}
