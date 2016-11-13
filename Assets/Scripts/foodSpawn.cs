@@ -46,13 +46,13 @@ public class foodSpawn : MonoBehaviour {
 
 	void RandomFoodDrop(){ 
 
-		Debug.Log (foodObjects.Length);
+		//Debug.Log (foodObjects.Length);
 		//foodObjects = new GameObject[7];
 
 		//random number generator, check if number is above#
 		randomNumber = Random.Range(0f, 100f);
 
-		Debug.Log ("random number is " + randomNumber);
+		//Debug.Log ("random number is " + randomNumber);
 
 		if (randomNumber <= breakPercent) {
 
