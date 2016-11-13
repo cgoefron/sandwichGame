@@ -8,8 +8,9 @@ public class playerController : MonoBehaviour {
 	public Player player;
 	public Rigidbody rb;
 	public float moveSpeed;
-	private bool hasFood = false;
+	//public bool hasFood = false;
 	public bool nearFood = false;
+	private GameObject theFood;
 
 	private float speed;
 	//private float RotationSpeed = 1.5f;
@@ -44,6 +45,20 @@ public class playerController : MonoBehaviour {
 		Vector3 movement = new Vector3 (move.x, rb.velocity.y, move.y);
 		rb.velocity = movement;
 
+		if (theFood) {
+			theFood.transform.position = transform.position;
+
+		}
+
+		if (player.GetButtonUp ("Action1") && theFood) {
+			print ("button pressed and dropped food");
+			//audio.PlayOneShot (pickupFood);
+			//food is let go
+			theFood.GetComponent<Rigidbody> ().isKinematic = false;
+			theFood.GetComponent<Rigidbody> ().detectCollisions = true;
+			theFood = null;
+
+		}
 
 //		if (move.x != 0 || move.y != 0) {
 //			//audio.Play(walkIndoors);
@@ -55,33 +70,28 @@ public class playerController : MonoBehaviour {
 	}
 		
 
-	void OnTriggerEnter(Collider other){
+	void OnTriggerStay(Collider other){
 
-		print ("trigger entered");
+		//print ("trigger entered");
 
 
-		if (other.tag == "Food") {
+		if (other.CompareTag("Food")) {
 			nearFood = true;
 
-			if (GetComponent<playerController> ().player.GetButton ("Action1") && hasFood == false) {
+			if (player.GetButton ("Action1") && !theFood) {
 				print ("button pressed and has food");
+				theFood = other.gameObject;
+				theFood.GetComponent<Rigidbody> ().isKinematic = true;
+				theFood.GetComponent<Rigidbody> ().detectCollisions = false;
 				//audio.PlayOneShot (pickupFood);
-				hasFood = true;
 				//food attaches to hand
-				other.transform.parent = transform;
+				//other.transform.parent = transform; //change to position
 				//disable colliders or hand while moving food?
 
 
 			}
 
-			if (GetComponent<playerController> ().player.GetButtonUp ("Action1") && hasFood == true) {
-				print ("button pressed and dropped food");
-				//audio.PlayOneShot (pickupFood);
-				hasFood = false;
-				//food is let go
-				other.transform.parent = null;
 
-			}
 		}
 		
 //		if ((other.CompareTag("tool")) && player.GetButtonDown("Action2")) {
