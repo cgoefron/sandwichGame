@@ -11,6 +11,7 @@ public class playerController : MonoBehaviour {
 	//public bool hasFood = false;
 	public bool nearFood = false;
 	private GameObject theFood;
+	public Transform handCollider;
 
 	private float speed;
 	//private float RotationSpeed = 1.5f;
@@ -46,7 +47,7 @@ public class playerController : MonoBehaviour {
 		rb.velocity = movement;
 
 		if (theFood) {
-			theFood.transform.position = transform.position;
+			theFood.transform.position = handCollider.transform.position;
 
 		}
 
