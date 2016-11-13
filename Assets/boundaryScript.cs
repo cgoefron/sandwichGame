@@ -13,7 +13,7 @@ public class boundaryScript : MonoBehaviour {
 	
 	}
 
-	void onTriggerEnter(Collider other){
+	void OnTriggerEnter(Collider other){
 
 		print ("object entered");
 
