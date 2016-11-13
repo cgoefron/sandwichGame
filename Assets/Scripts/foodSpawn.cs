@@ -44,41 +44,34 @@ public class foodSpawn : MonoBehaviour {
 		spawnTime = Random.Range(minTime, maxTime);
 	}
 
-	void RandomFoodDrop(){ //break random #(variable) at random interval (variable)
+	void RandomFoodDrop(){ 
 
-		//load all breakable objects into array
-		foodObjects = GameObject.FindGameObjectsWithTag ("Food");
+		Debug.Log (foodObjects.Length);
+		//foodObjects = new GameObject[7];
 
-		//Debug.Log (foodObjects.Length);
+		//random number generator, check if number is above#
+		randomNumber = Random.Range(0f, 100f);
 
+		Debug.Log ("random number is " + randomNumber);
 
-		foreach(GameObject foodObj in foodObjects)
-		{
+		if (randomNumber <= breakPercent) {
 
-			//if(foodObj.GetComponent<objectHealthScript>().objectBroken == false){
-				
-				//random number generator, check if number is above#
-				randomNumber = Random.Range(0f, 100f);
+		Instantiate (foodObjects[UnityEngine.Random.Range(0,foodObjects.Length)], transform.position, transform.rotation);
 
 
-				if (randomNumber <= breakPercent) {
-					//repairObj.GetComponent<objectHealthScript> ().BreakObject ();
 
-
-					//exit loop ("break") if it is broken
-					break;
-
-				} else {
-					//Debug.Log ("object skipped: " + randomNumber);
-				}
-
-
-			}
+		} else {
+			//Debug.Log ("object skipped: " + randomNumber);
 		}
 
 		time = 0;
 
-	}
+			}
+		}
+
+
+
+
 
 
 
