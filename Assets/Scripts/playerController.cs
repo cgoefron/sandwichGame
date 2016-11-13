@@ -15,14 +15,14 @@ public class playerController : MonoBehaviour {
 
 	private float speed;
 	//private float RotationSpeed = 1.5f;
-	private float xSpeed;
-	private float ySpeed;
+//	private float xSpeed;
+//	private float ySpeed;
 
-	//public AudioClip pickupFood;
-	//public AudioClip dropFoodTable;
+	public AudioClip pickupFood;
+	public AudioClip dropFoodTable;
 	//public AudioClip dropFoodFloor;
 	//public AudioClip slamTable;
-	//private AudioSource audio;
+	private AudioSource audio;
 
 
 	// Use this for initialization
@@ -35,7 +35,7 @@ public class playerController : MonoBehaviour {
 	void Start () {
 		rb = GetComponent<Rigidbody> ();
 		speed = 5f;
-		//audio = GetComponent<AudioSource>();
+		audio = GetComponent<AudioSource>();
 
 	}
 
@@ -53,7 +53,7 @@ public class playerController : MonoBehaviour {
 
 		if (player.GetButtonUp ("Action1") && theFood) {
 			print ("button pressed and dropped food");
-			//audio.PlayOneShot (pickupFood);
+			audio.PlayOneShot (dropFoodTable);
 			//food is let go
 			theFood.GetComponent<Rigidbody> ().isKinematic = false;
 			theFood.GetComponent<Rigidbody> ().detectCollisions = true;
@@ -84,7 +84,7 @@ public class playerController : MonoBehaviour {
 				theFood = other.gameObject;
 				theFood.GetComponent<Rigidbody> ().isKinematic = true;
 				theFood.GetComponent<Rigidbody> ().detectCollisions = false;
-				//audio.PlayOneShot (pickupFood);
+				audio.PlayOneShot (pickupFood);
 				//food attaches to hand
 				//other.transform.parent = transform; //change to position
 				//disable colliders or hand while moving food?
