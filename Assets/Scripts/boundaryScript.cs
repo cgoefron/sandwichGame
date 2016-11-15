@@ -15,10 +15,10 @@ public class boundaryScript : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other){
 
-		print ("object entered");
+		//print ("object entered");
 
-		if (other.tag == "Food") {
-			print ("food entered");
+		if (other.CompareTag("Food")) {
+			//print ("food entered");
 
 			Destroy(other.gameObject);
 		}

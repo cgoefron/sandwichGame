@@ -3,8 +3,6 @@ using System.Collections;
 
 public class onPlates : MonoBehaviour {
 
-	GameObject collider;
-
 	// Use this for initialization
 	void Start () {
 	
