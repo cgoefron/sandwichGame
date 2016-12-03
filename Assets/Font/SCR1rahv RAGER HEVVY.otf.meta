@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: d78e13d2c91b5417d97a6d0a2d8d7f23
+timeCreated: 1480796482
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - SCRIPT1 Rager Hevvy
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
