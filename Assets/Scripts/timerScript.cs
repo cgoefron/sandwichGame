@@ -7,7 +7,7 @@ public class timerScript : MonoBehaviour {
 	public float timeLeft = 60f;
 	private bool isGameOver = false;
 	public Text timerText;
-
+	private bool paused = false;
 
 
 	// Use this for initialization
@@ -20,7 +20,11 @@ public class timerScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		timerText.text = "" + timeLeft.ToString("f0");
+		if (!paused) {
+			timerText.text = "" + timeLeft.ToString ("f0");
+		}
+
+		Pause ();
 
 		timeLeft -= Time.deltaTime;
 		//print (timeLeft);
@@ -32,6 +36,24 @@ public class timerScript : MonoBehaviour {
 		}
 
 	}
+
+	void Pause(){
+		if(Input.GetKeyDown(KeyCode.P)){
+			if (!paused) {
+				paused = true;
+				Time.timeScale = 0;
+				timerText.text = ("Paused");
+				print ("Player has paused");
+			} else {		
+				paused = false;
+				Time.timeScale = 1;
+				}
+
+
+		}
+	}
+
+
 
 	void RoundEnd(){
 
