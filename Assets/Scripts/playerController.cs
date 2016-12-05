@@ -12,6 +12,9 @@ public class playerController : MonoBehaviour {
 	public bool nearFood = false;
 	private GameObject theFood;
 	public Transform handCollider;
+	public float thrust;
+	public Transform table;
+
 
 	private float speed;
 	//private float RotationSpeed = 1.5f;
@@ -45,6 +48,8 @@ public class playerController : MonoBehaviour {
 		Vector2 move = new Vector2 (player.GetAxis ("Horizontal"), player.GetAxis ("Vertical")) * moveSpeed;
 		Vector3 movement = new Vector3 (move.x, rb.velocity.y, move.y);
 		rb.velocity = movement;
+
+		Slam ();
 
 		if (theFood) {
 			theFood.transform.position = handCollider.transform.position;
@@ -113,6 +118,15 @@ public class playerController : MonoBehaviour {
 
 		if (other.tag == "Food") {
 			nearFood = false;
+
+		}
+	}
+
+	void Slam(){
+
+		if (Input.GetKeyDown(KeyCode.Space)){
+			//rb.AddForce(transform.forward * thrust); //Change this to force towards Table 
+			rb.AddForce(0, (table.transform.position.y - transform.position.y) * thrust, 0);
 
 		}
 	}
