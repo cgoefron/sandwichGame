@@ -14,7 +14,9 @@ public class playerController : MonoBehaviour {
 	public Transform handCollider;
 	public float thrust;
 	public Transform table;
-
+	public float yDefault;
+	private RigidbodyConstraints previousConstraints;
+	private float previousX, previousZ;
 
 	private float speed;
 	//private float RotationSpeed = 1.5f;
@@ -23,6 +25,7 @@ public class playerController : MonoBehaviour {
 
 	public AudioClip pickupFood;
 	public AudioClip dropFoodTable;
+	public AudioClip slam;
 	//public AudioClip dropFoodFloor;
 	//public AudioClip slamTable;
 	private AudioSource audio;
@@ -39,6 +42,11 @@ public class playerController : MonoBehaviour {
 		rb = GetComponent<Rigidbody> ();
 		speed = 5f;
 		audio = GetComponent<AudioSource>();
+		rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionY;
+		previousConstraints = rb.constraints;
+		previousX = transform.position.x;
+		previousZ = transform.position.z;
+		yDefault = transform.position.y;
 
 	}
 
@@ -57,7 +65,7 @@ public class playerController : MonoBehaviour {
 		}
 
 		if (player.GetButtonUp ("Action1") && theFood) {
-			print ("button pressed and dropped food");
+			//print ("button pressed and dropped food");
 			audio.PlayOneShot (dropFoodTable);
 			//food is let go
 			theFood.GetComponent<Rigidbody> ().isKinematic = false;
@@ -85,7 +93,7 @@ public class playerController : MonoBehaviour {
 			nearFood = true;
 
 			if (player.GetButton ("Action1") && !theFood) {
-				print ("button pressed and has food");
+				//print ("button pressed and has food");
 				theFood = other.gameObject;
 				theFood.GetComponent<Rigidbody> ().isKinematic = true;
 				theFood.GetComponent<Rigidbody> ().detectCollisions = false;
@@ -124,11 +132,35 @@ public class playerController : MonoBehaviour {
 
 	void Slam(){
 
-		if (Input.GetKeyDown(KeyCode.Space)){
-			//rb.AddForce(transform.forward * thrust); //Change this to force towards Table 
+		if (Input.GetKeyDown(KeyCode.Space)){ //add check for Y position before slamming
+			//rb.AddForce(transform.forward * thrust); 
+
+
+			// unfreeze y position, add force toward table
+			rb.constraints = RigidbodyConstraints.FreezeRotationY;
+			previousX = transform.position.x;
+			previousZ = transform.position.z;
 			rb.AddForce(0, (table.transform.position.y - transform.position.y) * thrust, 0);
+			// move hand to original y position (yDefault), re-freeze y transform - MOVING TO ONCOLLISIONENTER
+
+
+
+
 
 		}
+	}
+
+	void OnCollisionEnter(Collision col){
+		if (col.gameObject.name == "Table") {
+			//Debug.Log ("How can she slap? Y = " + yDefault);
+		
+			audio.PlayOneShot (slam);
+			transform.position = new Vector3(previousX, yDefault, previousZ);
+			//transform.position.y = yDefault; //This doesn't work; need to make temp var, and move towards
+			rb.constraints = previousConstraints; // set to previous state
+
+		}
+		
 	}
 
 

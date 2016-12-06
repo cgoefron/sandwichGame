@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class timerScript : MonoBehaviour {
 
-	public float timeLeft = 60f;
+	public float timeLeft;
 	private bool isGameOver = false;
 	public Text timerText;
 	private bool paused = false;
@@ -13,7 +13,7 @@ public class timerScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		timeLeft = 10f;
+		//timeLeft = 60f;
 
 	}
 
