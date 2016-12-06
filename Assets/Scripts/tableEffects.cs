@@ -3,23 +3,25 @@ using System.Collections;
 
 public class tableEffects : MonoBehaviour {
 
-	//Sound effects when food hits the table
 
-	//Sound effects when hands hit table?
+	public float radius;
+	public float power;
+	public float air;
 
-	//shake or particle effects
-
-	public float speed; //how fast it shakes
-	public float amount; //how much it shakes
 	private float defaultY;
+	private Rigidbody rb;
+	public Camera mainCamera;
 
 
 	void Start (){
 		defaultY = transform.position.y;
+
+
+
 	}
 
 	void Update() {
-		//defaultY = Mathf.Sin(Time.time * speed);
+
 	}
 		
 
@@ -30,11 +32,26 @@ public class tableEffects : MonoBehaviour {
 		if (col.gameObject.tag == "Player") {
 
 			Debug.Log ("Table is hit");
-
-			transform.position = Random.insideUnitCircle * amount * (Time.time * speed);
-
+			Detonate ();
+			mainCamera.GetComponent<CameraShake>().DoShake();
+			//transform.position = Random.insideUnitCircle * amount * (Time.time * speed);
+			//rb.AddExplosionForce(10, Vector3.zero, 10, 0, ForceMode.Impulse);
 		}
 
+	}
+
+	void Detonate(){
+
+		Vector3 explosionPos = transform.position;
+		Collider[] colliders = Physics.OverlapSphere (Vector3.zero, 10);
+
+		foreach (Collider col in colliders) {
+
+			Rigidbody rb = col.GetComponent<Rigidbody> ();
+
+			if (rb != null)
+				rb.AddExplosionForce(power, explosionPos, radius, air);
+		}
 	}
 
 }
