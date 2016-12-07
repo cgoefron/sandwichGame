@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 public class playerEntryScript : MonoBehaviour {
 
 	public Color playerColor;                           // Color assigned to player
-	[HideInInspector] public int playerID;  		    // Number of players entering game
-	private GameObject [] playerCount;  				// Unique players
+	[HideInInspector] public int playerCount;  		    // Number of players entering game
+	private GameObject [] playerID;  				// Unique players
 
 	// Use this for initialization
 	void Start () {
@@ -17,7 +17,7 @@ public class playerEntryScript : MonoBehaviour {
 	void Update () {
 		//if start button is pressed, ++ to playerCount, assign 
 		if (Input.GetButton("A")){
-			playerID++;
+			playerCount++;
 		}
 
 		if (Input.GetButtonDown("Start")){

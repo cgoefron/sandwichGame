@@ -8,7 +8,7 @@ public class playerController : MonoBehaviour {
 	public Player player;
 	public Rigidbody rb;
 	public float moveSpeed;
-	//public bool hasFood = false;
+	public bool isGrabbing = false;
 	public bool nearFood = false;
 	private GameObject theFood;
 	public Transform handCollider;
@@ -30,6 +30,9 @@ public class playerController : MonoBehaviour {
 	//public AudioClip slamTable;
 	private AudioSource audio;
 
+	public GameObject defaultHand;
+	public GameObject grabHand;
+
 
 	// Use this for initialization
 
@@ -47,6 +50,7 @@ public class playerController : MonoBehaviour {
 		previousX = transform.position.x;
 		previousZ = transform.position.z;
 		yDefault = transform.position.y;
+		isGrabbing = false;
 
 	}
 
@@ -71,6 +75,11 @@ public class playerController : MonoBehaviour {
 			theFood.GetComponent<Rigidbody> ().isKinematic = false;
 			theFood.GetComponent<Rigidbody> ().detectCollisions = true;
 			theFood = null;
+
+			isGrabbing = false;
+			//turn off grabbingHand and turn on regular hand
+			grabHand.SetActive(false);
+			defaultHand.SetActive (true);
 
 		}
 
@@ -102,24 +111,17 @@ public class playerController : MonoBehaviour {
 				//other.transform.parent = transform; //change to position
 				//disable colliders or hand while moving food?
 
+				isGrabbing = true;
+				//turn off hand and turn on grabbingHand
+				defaultHand.SetActive (false);
+				grabHand.SetActive(true);
+
 
 			}
 
 
 		}
-		
-//		if ((other.CompareTag("tool")) && player.GetButtonDown("Action2")) {
-//			print ("pickup");
-//			//play pickup sound
-//			audio.PlayOneShot(pickupTool);
-//			other.transform.parent = transform;
-//			haveTool = true;
-//		}
-//		if ((haveTool = true) && player.GetButtonDown("Action3")) {
-//			print ("tool drop");
-//			audio.PlayOneShot(dropTool);
-//			other.transform.parent = null;
-//		}
+
 	}
 
 	void OnTriggerExit(Collider other){
