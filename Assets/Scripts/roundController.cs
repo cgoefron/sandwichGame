@@ -31,6 +31,7 @@ public class timerScript : MonoBehaviour {
 		if (timeLeft <= 1f) {
 			RoundEnd ();
 			timerText.text = ("Round Over!");
+			//"Player _ Wins!"
 			print ("DONE!");
 
 		}

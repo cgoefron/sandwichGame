@@ -7,7 +7,7 @@ public class MoveSholder : MonoBehaviour {
 	private float newX;
 	private float newZ;
 
-	public float speed = 5;
+	public float speed;
 
 	void Start () {
 		speed = speed * Time.deltaTime;
@@ -20,12 +20,12 @@ public class MoveSholder : MonoBehaviour {
 		newZ = transform.position.z;
 
 
-		if ((hand.position.x - newX) < 5 || (newZ - hand.position.z) < 5 ) {
+		if ((hand.position.x - newX) < 6 || (newZ - hand.position.z) < 6 ) {
 			newX -= speed;
 			newZ += speed;
 		}
 
-		else if ((hand.position.x - newX) > 10 || (newZ - hand.position.z) > 10 ) {
+		else if ((hand.position.x - newX) > 17 || (newZ - hand.position.z) > 17 ) {
 			newX += speed;
 			newZ -= speed;
 		}
