@@ -17,17 +17,14 @@ public class playerController : MonoBehaviour {
 	public float yDefault;
 	private RigidbodyConstraints previousConstraints;
 	private float previousX, previousZ;
-
-	private float speed;
-	//private float RotationSpeed = 1.5f;
-//	private float xSpeed;
-//	private float ySpeed;
+	private bool canSlam;
+	//private float speed;
 
 	public AudioClip pickupFood;
 	public AudioClip dropFoodTable;
 	public AudioClip slam;
 	//public AudioClip dropFoodFloor;
-	//public AudioClip slamTable;
+	public AudioClip slamTable;
 	private AudioSource audio;
 
 	public GameObject defaultHand;
@@ -43,7 +40,6 @@ public class playerController : MonoBehaviour {
 
 	void Start () {
 		rb = GetComponent<Rigidbody> ();
-		speed = 5f;
 		audio = GetComponent<AudioSource>();
 		rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionY;
 		previousConstraints = rb.constraints;
@@ -51,7 +47,8 @@ public class playerController : MonoBehaviour {
 		previousZ = transform.position.z;
 		yDefault = transform.position.y;
 		isGrabbing = false;
-
+		canSlam = true;
+		//speed = 5f;
 	}
 
 	// Update is called once per frame
@@ -69,49 +66,52 @@ public class playerController : MonoBehaviour {
 		}
 
 		if (player.GetButtonUp ("Action1") && theFood) {
+			
 			//print ("button pressed and dropped food");
 			audio.PlayOneShot (dropFoodTable);
-			//food is let go
+
+			//food is let go and collisions are turned on again
 			theFood.GetComponent<Rigidbody> ().isKinematic = false;
 			theFood.GetComponent<Rigidbody> ().detectCollisions = true;
 			theFood = null;
 
 			isGrabbing = false;
+
+			canSlam = true; //After dropping food, player can slam again
+
 			//turn off grabbingHand and turn on regular hand
 			grabHand.SetActive(false);
 			defaultHand.SetActive (true);
 
 		}
-
-//		if (move.x != 0 || move.y != 0) {
-//			//audio.Play(walkIndoors);
-//
-//			//play walk sound; change based on outdoor/indoor?
-//
-//		}
-			
 	}
 		
 
 	void OnTriggerStay(Collider other){
 
-		//print ("trigger entered");
-
-
 		if (other.CompareTag("Food")) {
 			nearFood = true;
 
 			if (player.GetButton ("Action1") && !theFood) {
-				//print ("button pressed and has food");
+				
 				theFood = other.gameObject;
 				theFood.GetComponent<Rigidbody> ().isKinematic = true;
 				theFood.GetComponent<Rigidbody> ().detectCollisions = false;
 				audio.PlayOneShot (pickupFood);
 				//food attaches to hand
-				//other.transform.parent = transform; //change to position
+
 				//disable colliders or hand while moving food?
 
 				isGrabbing = true;
+
+				//Player cannot slam while holding food
+				canSlam = false;
+
+				//Unless it's a ketchup or mustard packet
+				if (other.gameObject.name == "ketchup" || other.gameObject.name == "mustard") {
+					canSlam = true;
+				}
+
 				//turn off hand and turn on grabbingHand
 				defaultHand.SetActive (false);
 				grabHand.SetActive(true);
@@ -134,19 +134,21 @@ public class playerController : MonoBehaviour {
 
 	void Slam(){
 
-		if (Input.GetKeyDown(KeyCode.Space)){ //add check for Y position before slamming
-			//rb.AddForce(transform.forward * thrust); 
+		if (canSlam){
+
+			if (Input.GetKeyDown (KeyCode.Space)) { //add check for Y position before slamming
+				//rb.AddForce(transform.forward * thrust); 
 
 
-			// unfreeze y position, add force toward table
-			rb.constraints = RigidbodyConstraints.FreezeRotationY;
-			previousX = transform.position.x;
-			previousZ = transform.position.z;
-			rb.AddForce(0, (table.transform.position.y - transform.position.y) * thrust, 0);
-			// move hand to original y position (yDefault), re-freeze y transform - MOVING TO ONCOLLISIONENTER
+				// unfreeze y position, add force toward table
+				rb.constraints = RigidbodyConstraints.FreezeRotationY;
+				previousX = transform.position.x;
+				previousZ = transform.position.z;
+				rb.AddForce (0, (table.transform.position.y - transform.position.y) * thrust, 0);
+				// move hand to original y position (yDefault), re-freeze y transform - MOVING TO ONCOLLISIONENTER
 
 
-
+			}
 
 
 		}
