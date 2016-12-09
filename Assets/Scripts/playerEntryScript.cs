@@ -1,35 +1,76 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using Rewired;
 
 public class playerEntryScript : MonoBehaviour {
 
 	public Color playerColor;                           // Color assigned to player
 	[HideInInspector] public int playerCount;  		    // Number of players entering game
-	private GameObject [] playerID;  				    // Unique players
-	public GameObject player1;
-	public GameObject player2;
-	public GameObject player3;
-	public GameObject player4;
+	public int playerId = 0;
+	public Player player;
 
+	//hands on screen
+	public GameObject hand1;
+	public GameObject hand2;
+	public GameObject hand3;
+	public GameObject hand4;
+
+
+	//make public bools for each player - if player1 Action, then player1 bool true
+	public static bool player1entered;
+	public static bool player2entered;
+	public static bool player3entered;
+	public static bool player4entered;
+
+	void Awake(){
+
+		player = ReInput.players.GetPlayer(playerId);	
+
+	}
 
 	// Use this for initialization
 	void Start () {
-		playerCount = 0;
+		player1entered = false;
+		player2entered = false;
+		player3entered = false;
+		player4entered = false;
 	}
-	
 	// Update is called once per frame
 	void Update () {
 		//if start button is pressed, ++ to playerCount, assign 
-		if (Input.GetButton("Action1")){
-			playerCount++;
-			//if player enters game, make a hand move up. Disable once moved.
-			//Need to make a persistant trigger into next scene for available players 
 
-		}
 
-		if (Input.GetButtonDown("Start")){ //Map start button
-			SceneManager.LoadScene("scene1"); //Change to whatever game level is
+		PlayerEntry ();
+
+		if (player.GetButtonDown("Start")){ //Map start button
+			SceneManager.LoadScene("GameScene"); //Change to whatever game level is
 		}
 	}
+
+
+	public void PlayerEntry(){
+		if (player.GetButton("Action1")){
+
+		if (playerId == 0) {
+				//Debug.Log ("player 1 pressed A");
+				player1entered = true;
+		}
+
+		if (playerId == 1) {
+				player2entered = true;
+		}
+
+		if (playerId == 2) {
+				player3entered = true;
+		}
+
+		if (playerId == 3) {
+				player4entered = true;
+		}
+
+		//if player enters game, make a hand move up. Disable once moved.
+		//Need to make a persistant trigger into next scene for available players 
+	}
+}
 }

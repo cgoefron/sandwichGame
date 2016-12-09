@@ -29,13 +29,14 @@ public class playerController : MonoBehaviour {
 
 	public GameObject defaultHand;
 	public GameObject grabHand;
-
+	public Transform cameraTransform; 
 
 	// Use this for initialization
 
 	void Awake(){
 
 		player = ReInput.players.GetPlayer(playerId);	
+
 	}
 
 	void Start () {
@@ -55,7 +56,14 @@ public class playerController : MonoBehaviour {
 	void FixedUpdate () {
 
 		Vector2 move = new Vector2 (player.GetAxis ("Horizontal"), player.GetAxis ("Vertical")) * moveSpeed;
-		Vector3 movement = new Vector3 (move.x, rb.velocity.y, move.y);
+		//Vector3 movement = new Vector3 (player.GetAxis ("Horizontal"), rb.velocity.y, player.GetAxis ("Vertical")) * moveSpeed;
+
+		//Vector3 movement = new Vector3 (move.x * cameraTransform.transform.right, rb.velocity.y, move.y * cameraTransform.transform.up);
+		//Vector3 movement = new Vector3 (move.x, rb.velocity.y, move.y);
+		Vector3 movement = new Vector3 (move.x, move.y, rb.velocity.y);
+
+		movement = Camera.main.transform.TransformDirection(movement);
+
 		rb.velocity = movement;
 
 		Slam ();
@@ -66,7 +74,8 @@ public class playerController : MonoBehaviour {
 		}
 
 		if (player.GetButtonUp ("Action1") && theFood) {
-			
+
+
 			//print ("button pressed and dropped food");
 			audio.PlayOneShot (dropFoodTable);
 
@@ -93,7 +102,10 @@ public class playerController : MonoBehaviour {
 			nearFood = true;
 
 			if (player.GetButton ("Action1") && !theFood) {
-				
+
+				Debug.Log ("player id = " + player.id);
+
+
 				theFood = other.gameObject;
 				theFood.GetComponent<Rigidbody> ().isKinematic = true;
 				theFood.GetComponent<Rigidbody> ().detectCollisions = false;

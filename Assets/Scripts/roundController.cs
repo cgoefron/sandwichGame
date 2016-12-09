@@ -2,19 +2,48 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class timerScript : MonoBehaviour {
+public class roundController : MonoBehaviour {
 
 	public float timeLeft;
 	private bool isGameOver = false;
 	public Text timerText;
 	private bool paused = false;
 
+	public GameObject player1;
+	public GameObject player2;
+	public GameObject player3;
+	public GameObject player4;
+
+	void Awake(){
+		
+	//Set all objects to false?
+		player1.SetActive(false);
+		player2.SetActive(false);
+		player3.SetActive(false);
+		player4.SetActive(false);
+	}
 
 	// Use this for initialization
 	void Start () {
 
-		//timeLeft = 60f;
+		if (playerEntryScript.player1entered) {
+			player1.SetActive(true);
+		}
 
+		if (playerEntryScript.player2entered) {
+			player2.SetActive(true);
+		}
+
+		if (playerEntryScript.player3entered) {
+			player3.SetActive(true);
+		}
+
+		if (playerEntryScript.player4entered) {
+			player4.SetActive(true);
+		}
+
+		//timeLeft = 60f;
+		//Turn on player objects
 	}
 
 	// Update is called once per frame
