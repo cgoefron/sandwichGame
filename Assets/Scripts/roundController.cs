@@ -12,11 +12,28 @@ public class roundController : MonoBehaviour {
 	public int playerId = 0;
 	private Player player;
 	private AudioSource audio;
+	private int winningPlayer;
 
 	public GameObject player1;
 	public GameObject player2;
 	public GameObject player3;
 	public GameObject player4;
+
+	private GameObject Plate1;
+	private GameObject Plate2;
+	private GameObject Plate3;
+	private GameObject Plate4;
+
+	private int player1score;
+	private int player2score;
+	private int player3score;
+	private int player4score;
+
+	public Camera mainCamera;
+	public Camera p1Camera;
+	public Camera p2Camera;
+	public Camera p3Camera;
+	public Camera p4Camera;
 
 	void Awake(){
 	
@@ -51,8 +68,16 @@ public class roundController : MonoBehaviour {
 			player4.SetActive(true);
 		}
 
-		//timeLeft = 60f;
-		//Turn on player objects
+		Plate1 = GameObject.Find ("Plate1");
+		Plate2 = GameObject.Find ("Plate2");
+		Plate3 = GameObject.Find ("Plate3");
+		Plate4 = GameObject.Find ("Plate4");
+
+		player1score = Plate1.GetComponent<plateScript>().player1score;
+		player2score = Plate1.GetComponent<plateScript>().player2score;
+		player3score = Plate1.GetComponent<plateScript>().player3score;
+		player4score = Plate1.GetComponent<plateScript>().player4score;
+
 	}
 
 	// Update is called once per frame
@@ -69,7 +94,9 @@ public class roundController : MonoBehaviour {
 		if (timeLeft <= 1f) {
 			RoundEnd ();
 			timerText.text = ("Round Over!");
-			//"Player _ Wins!"
+
+			// yield and then load player wins function
+			PlayerWins();
 		}
 
 	}
@@ -102,18 +129,55 @@ public class roundController : MonoBehaviour {
 
 		isGameOver = true;
 		//play sound effect
+
 		GetComponent<AudioSource>().Stop();
 		//print ("DONE!");
 
+		player1.SetActive(false);
+		player2.SetActive(false);
+		player3.SetActive(false);
+		player4.SetActive(false);
 
-		//Add individual player-winner message
-//		if (houseHealth > realtorWinAmount){
-//			scoreText.text = "Round Over! Realtors Win!";
-//		}
-//
-//		if (houseHealth <= realtorWinAmount){
-//			scoreText.text = "Round Over! Vampire Wins!";
-//		}
+
+	}
+
+	void PlayerWins(){
+		//calculate winner
+
+		int winningScore = Mathf.Max (player1score, player2score, player3score, player4score);
+
+		//turn off main camera
+		mainCamera.enabled = false;
+
+		//change camera to winning player
+		//grab winning player #
+
+		if (player1score == winningScore){
+		 	winningPlayer = 1;
+			p1Camera.enabled = true;
+			Debug.Log (winningPlayer);
+		  }
+
+		if (player2score == winningScore){
+			winningPlayer = 2;
+			p2Camera.enabled = true;
+		}
+
+		if (player3score == winningScore){
+			winningPlayer = 3;
+			p3Camera.enabled = true;
+		}
+
+		if (player4score == winningScore){
+			winningPlayer = 4;
+			p4Camera.enabled = true;
+		}
+
+
+
+		//change text: Player # wins!
+		timerText.text = ("Player" + winningPlayer + "wins!");
+	
 	}
 
 }
