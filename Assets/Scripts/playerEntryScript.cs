@@ -35,6 +35,7 @@ public class playerEntryScript : MonoBehaviour {
 		player2entered = false;
 		player3entered = false;
 		player4entered = false;
+		playerCount = 0;
 	}
 	// Update is called once per frame
 	void Update () {
@@ -43,7 +44,7 @@ public class playerEntryScript : MonoBehaviour {
 
 		PlayerEntry ();
 
-		if (player.GetButtonDown("Start")){ //Map start button
+		if (playerCount>0 && player.GetButtonDown("Start")){ //Map start button
 			SceneManager.LoadScene("GameScene"); //Change to whatever game level is
 		}
 	}
@@ -55,18 +56,25 @@ public class playerEntryScript : MonoBehaviour {
 		if (playerId == 0) {
 				//Debug.Log ("player 1 pressed A");
 				player1entered = true;
+				playerCount++;
 		}
 
 		if (playerId == 1) {
 				player2entered = true;
+				playerCount++;
+
 		}
 
 		if (playerId == 2) {
 				player3entered = true;
+				playerCount++;
+
 		}
 
 		if (playerId == 3) {
 				player4entered = true;
+				playerCount++;
+
 		}
 
 		//if player enters game, make a hand move up. Disable once moved.

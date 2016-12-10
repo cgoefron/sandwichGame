@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using Rewired;
 
 public class roundController : MonoBehaviour {
 
@@ -8,6 +9,9 @@ public class roundController : MonoBehaviour {
 	private bool isGameOver = false;
 	public Text timerText;
 	private bool paused = false;
+	public int playerId = 0;
+	private Player player;
+	private AudioSource audio;
 
 	public GameObject player1;
 	public GameObject player2;
@@ -15,7 +19,9 @@ public class roundController : MonoBehaviour {
 	public GameObject player4;
 
 	void Awake(){
-		
+	
+		player = ReInput.players.GetPlayer(playerId);	
+
 	//Set all objects to false?
 		player1.SetActive(false);
 		player2.SetActive(false);
@@ -25,6 +31,9 @@ public class roundController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+		audio = GetComponent<AudioSource>();
+
 
 		if (playerEntryScript.player1entered) {
 			player1.SetActive(true);
@@ -61,22 +70,24 @@ public class roundController : MonoBehaviour {
 			RoundEnd ();
 			timerText.text = ("Round Over!");
 			//"Player _ Wins!"
-			print ("DONE!");
-
 		}
 
 	}
 
 	void Pause(){
-		if(Input.GetKeyDown(KeyCode.P)){
+		if(player.GetButtonDown("Start")){
 			if (!paused) {
 				paused = true;
 				Time.timeScale = 0;
 				timerText.text = ("Paused");
 				print ("Player has paused");
+				//Stop music
+				audio.Stop();
 			} else {		
 				paused = false;
 				Time.timeScale = 1;
+				//play music
+				audio.Play();
 				}
 
 
@@ -92,6 +103,8 @@ public class roundController : MonoBehaviour {
 		isGameOver = true;
 		//play sound effect
 		GetComponent<AudioSource>().Stop();
+		print ("DONE!");
+
 
 		//Add individual player-winner message
 //		if (houseHealth > realtorWinAmount){

@@ -97,7 +97,7 @@ public class foodSpawn : MonoBehaviour {
 			breadMaxTime++;
 			breadMinTime++;
 
-			Debug.Log (breadMinTime);
+			//Debug.Log (breadMinTime);
 
 
 		}

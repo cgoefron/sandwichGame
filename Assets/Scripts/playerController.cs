@@ -103,7 +103,7 @@ public class playerController : MonoBehaviour {
 
 			if (player.GetButton ("Action1") && !theFood) {
 
-				Debug.Log ("player id = " + player.id);
+				//Debug.Log ("player id = " + player.id);
 
 
 				theFood = other.gameObject;
@@ -148,7 +148,7 @@ public class playerController : MonoBehaviour {
 
 		if (canSlam){
 
-			if (Input.GetKeyDown (KeyCode.Space)) { //add check for Y position before slamming
+			if (player.GetButton ("Action2")) { //add check for Y position before slamming
 				//rb.AddForce(transform.forward * thrust); 
 
 
