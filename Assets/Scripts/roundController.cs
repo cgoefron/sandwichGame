@@ -103,7 +103,7 @@ public class roundController : MonoBehaviour {
 		isGameOver = true;
 		//play sound effect
 		GetComponent<AudioSource>().Stop();
-		print ("DONE!");
+		//print ("DONE!");
 
 
 		//Add individual player-winner message
