@@ -8,12 +8,12 @@ public class handEntryScript : MonoBehaviour {
 	public float speed = 1.0F;
 	private float startTime;
 	private float journeyLength;
-	private GameObject EntryScreenController;
+	//private GameObject EntryScreenController;
 
 	void Start() {
 		startTime = Time.time;
 		journeyLength = Vector3.Distance(startMarker.position, endMarker.position);
-		EntryScreenController = GameObject.Find ("EntryScreenController");
+		//EntryScreenController = GameObject.Find ("EntryScreenController");
 	}
 
 	void Update() {

@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using Rewired;
+using UnityEngine.SceneManagement;
 
 public class roundController : MonoBehaviour {
 
@@ -136,7 +137,11 @@ public class roundController : MonoBehaviour {
 			// yield and then load player wins function
 			if (!isScoreCalculated) {
 				PlayerWins ();
+				//Display restart instructions
 			}
+			//Add check to detect back button to restart game
+			if (Input.GetKey (KeyCode.R) || player.GetButton("Select")) {
+				SceneManager.LoadScene("PlayerSelectScreen");			}
 		}		
 	}
 
@@ -149,12 +154,19 @@ public class roundController : MonoBehaviour {
 				print ("Player has paused");
 				//Stop music
 				audio.Stop();
+				//Display restart instructions
 			} else {		
 				paused = false;
 				Time.timeScale = 1;
 				//play music
 				audio.Play();
+				//Hide restart instructions
 			}
+		}
+		if (paused) {
+			if (Input.GetKey (KeyCode.R) || player.GetButton("Select")) {
+				SceneManager.LoadScene("PlayerSelectScreen");			}
+			//Add check to detect back button to restart game
 		}
 	}
 
