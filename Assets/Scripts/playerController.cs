@@ -150,11 +150,11 @@ public class playerController : MonoBehaviour {
 
 			if (player.GetButton ("Action2")) { //add check for Y position before slamming
 				//rb.AddForce(transform.forward * thrust); 
-				//Debug.Log("player hit B");
+				Debug.Log("player hit B");
 
 
 				// unfreeze y position, add force toward table
-				rb.constraints = RigidbodyConstraints.FreezePositionY;
+				rb.constraints = RigidbodyConstraints.FreezeRotationY;
 				previousX = transform.position.x;
 				previousZ = transform.position.z;
 				rb.AddForce (0, (table.transform.position.y - transform.position.y) * thrust, 0);
