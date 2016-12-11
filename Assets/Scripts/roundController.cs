@@ -7,6 +7,7 @@ public class roundController : MonoBehaviour {
 
 	public float timeLeft;
 	private bool isGameOver = false;
+	private bool isScoreCalculated = false;
 	public Text timerText;
 	private bool paused = false;
 	private int playerId = 0;
@@ -20,10 +21,10 @@ public class roundController : MonoBehaviour {
 	public GameObject player3;
 	public GameObject player4;
 
-	private GameObject Plate1;
-	private GameObject Plate2;
-	private GameObject Plate3;
-	private GameObject Plate4;
+	public GameObject Plate1;
+	public GameObject Plate2;
+	public GameObject Plate3;
+	public GameObject Plate4;
 
 	private int player1score;
 	private int player2score;
@@ -40,7 +41,6 @@ public class roundController : MonoBehaviour {
 	private int highScore;
 	private int highScoreCount;
 	private int playerCount = 0;
-	private int winningScore = 0;
 	private int tieCount = 0;
 	private bool tieGame = false;
 
@@ -54,69 +54,83 @@ public class roundController : MonoBehaviour {
 		player2.SetActive(false);
 		player3.SetActive(false);
 		player4.SetActive(false);
+
+		playerScores = new int[4];
 	}
 
 	// Use this for initialization
 	void Start () {
+		mainCamera.enabled = true;
+		p1Camera.enabled = false;
+		p2Camera.enabled = false;
+		p3Camera.enabled = false;
+		p4Camera.enabled = false;
 
 		audio = GetComponent<AudioSource>();
 
 
 		if (playerEntryScript.player1entered) {
+			Debug.Log ("player 1 is entered");
 			player1.SetActive(true);
 			playerCount += 1;
-			winningPlayerText = "Player 1"; //Handles solo player
+			//winningPlayerText = "Player 1"; //Handles solo player
 		}
 
 		if (playerEntryScript.player2entered) {
+			Debug.Log ("player 2 is entered");
+
 			player2.SetActive(true);
 			playerCount += 1;
-			winningPlayerText = "Player 2"; //Handles solo player
+			//winningPlayerText = "Player 2"; //Handles solo player
 		}
 
 		if (playerEntryScript.player3entered) {
+			Debug.Log ("player 3 is entered");
+
 			player3.SetActive(true);
 			playerCount += 1;
-			winningPlayerText = "Player 3"; //Handles solo player
+			//winningPlayerText = "Player 3"; //Handles solo player
 		}
 
 		if (playerEntryScript.player4entered) {
+			Debug.Log ("player 4 is entered");
+
 			player4.SetActive(true);
 			playerCount += 1;
-			winningPlayerText = "Player 4"; //Handles solo player
+			//winningPlayerText = "Player 4"; //Handles solo player
 		}
+			
+//		Plate1 = GameObject.Find ("Plate1");
+//		Plate2 = GameObject.Find ("Plate2");
+//		Plate3 = GameObject.Find ("Plate3");
+//		Plate4 = GameObject.Find ("Plate4");
 
-		Plate1 = GameObject.Find ("Plate1");
-		Plate2 = GameObject.Find ("Plate2");
-		Plate3 = GameObject.Find ("Plate3");
-		Plate4 = GameObject.Find ("Plate4");
-
-		player1score = Plate1.GetComponent<plateScript>().player1score;
-		player2score = Plate1.GetComponent<plateScript>().player2score;
-		player3score = Plate1.GetComponent<plateScript>().player3score;
-		player4score = Plate1.GetComponent<plateScript>().player4score;
 
 	}
 
 	// Update is called once per frame
 	void Update () {
 
-		if (!paused) {
-			timerText.text = "" + timeLeft.ToString ("f0");
-		}
+		mainCamera.enabled = false;
+		p1Camera.enabled = true;
 
-		Pause ();
+		if (!isGameOver) {
+			if (!paused) {
+				timerText.text = "" + timeLeft.ToString ("f0");
+			}
 
-		timeLeft -= Time.deltaTime;
-		//print (timeLeft);
-		if (timeLeft <= 1f) {
-			RoundEnd ();
-			timerText.text = ("Round Over!");
+			Pause ();
 
+			timeLeft -= Time.deltaTime;
+			//print (timeLeft);
+
+			RoundEndCheck ();
+		} else {
 			// yield and then load player wins function
-			PlayerWins();
-		}
-
+			if (!isScoreCalculated) {
+				PlayerWins ();
+			}
+		}		
 	}
 
 	void Pause(){
@@ -133,98 +147,92 @@ public class roundController : MonoBehaviour {
 				Time.timeScale = 1;
 				//play music
 				audio.Play();
-				}
-
-
+			}
 		}
 	}
 
 
 
-	void RoundEnd(){
+	void RoundEndCheck(){
+		if (timeLeft <= 1f) {
+			Time.timeScale = 0;
 
-		Time.timeScale = 0;
+			isGameOver = true;
+			//play sound effect
 
-		isGameOver = true;
-		//play sound effect
-
-		GetComponent<AudioSource>().Stop();
-		//print ("DONE!");
-
-		player1.SetActive(false);
-		player2.SetActive(false);
-		player3.SetActive(false);
-		player4.SetActive(false);
-
-
+			GetComponent<AudioSource>().Stop();
+			//print ("DONE!");
+		}
 	}
 
 	void PlayerWins(){
 		//calculate winner
-		//Handle tie score
-		//Only calculate active players
-		//Handle 0 score
 
-		//int winningScore = Mathf.Max (player1score, player2score, player3score, player4score);
+		timerText.text = ("Round Over!\n");
 
-		//highScore
-		//highScoreCount
-
-		//turn off main camera, enable correct camera later
-		mainCamera.enabled = false;
+		player1score = Plate1.GetComponent<plateScript>().player1score;
+		player2score = Plate1.GetComponent<plateScript>().player2score;
+		player3score = Plate1.GetComponent<plateScript>().player3score;
+		player4score = Plate1.GetComponent<plateScript>().player4score;
 
 		//change camera to winning player
-		//grab winning player #
+		playerScores [0] = player1score;
+		playerScores [1] = player2score;
+		playerScores [2] = player3score;
+		playerScores [3] = player4score;
 
-		if (player1.activeInHierarchy) {
+		/*
+		if (playerEntryScript.player1entered) {
 			Debug.Log ("Calc Player 1 Score");
-			playerScores [1] = player1score;
+			playerScores [0] = player1score;
+		} else {
+			playerScores [0] = 0;
+		}
+
+		if (playerEntryScript.player2entered) {
+			Debug.Log ("Calc Player 2 Score");
+			playerScores[1] = player2score;
 		} else {
 			playerScores [1] = 0;
 		}
 
-		if (player2.activeInHierarchy) {
-			Debug.Log ("Calc Player 2 Score");
-			playerScores[2] = player2score;
+		if (playerEntryScript.player3entered) {
+			Debug.Log ("Calc Player 3 Score");
+			playerScores[2] = player3score;
 		} else {
 			playerScores [2] = 0;
 		}
 
-		if (player3.activeInHierarchy) {
-			Debug.Log ("Calc Player 3 Score");
-			playerScores[3] = player3score;
-		} else {
+		if (playerEntryScript.player4entered) {
+			Debug.Log ("Calc Player 4 Score");
+			playerScores[3] = player4score;
+		}else {
 			playerScores [3] = 0;
 		}
+		*/
 
-		if (player4.activeInHierarchy) {
-			Debug.Log ("Calc Player 4 Score");
-			playerScores[4] = player4score;
-		}else {
-			playerScores [4] = 0;
-		}
-
-		//Calculate highest score
+		//Calculate highest score and grab winning player #
 	
-		Debug.Log ("Player Scores... 1) " + playerScores [1] + " 2) " + playerScores [2] + " 3) " + playerScores [3] + " 4) " + playerScores [4]);
+		Debug.Log ("Player Scores... 1) " + playerScores [0] + " 2) " + playerScores [1] + " 3) " + playerScores [2] + " 4) " + playerScores [3]);
 
 		//Add sort and check
 
-		winningScore = 0;
+		highScore = 0;
 
-		for (int i = 1; i <= playerScores.Length; i++)
+		for (int i = 0; i < playerScores.Length; i++)
 		{
 			int value = playerScores[i];
-			Debug.Log ("Score loop player " + i);
-			if (value > winningScore)
+
+			Debug.Log ("Score loop player " + (i + 1));
+			if (value > highScore)
 			{
-				Debug.Log ("Player " + i + " score: " + value );
-				winningScore = value;
-				winningPlayer = i;
+				Debug.Log ("Player " + (i + 1) + " score: " + value );
+				highScore = value;
+				winningPlayer = (i + 1);
 			}
 		}
 
-		if (player1score == winningScore){
+		if (player1score == highScore && playerEntryScript.player1entered){
 		 	//winningPlayer = 1;
 			winningPlayerText = "Player 1";
 			tieCount +=1;
@@ -232,7 +240,7 @@ public class roundController : MonoBehaviour {
 			//Debug.Log (winningPlayer);
 		  }
 
-		if (player2score == winningScore){
+		if (player2score == highScore && playerEntryScript.player2entered){
 			//winningPlayer = 2;
 			if (tieCount > 0) {
 				winningPlayerText += " and Player 2";
@@ -243,7 +251,7 @@ public class roundController : MonoBehaviour {
 			//p2Camera.enabled = true;
 		}
 
-		if (player3score == winningScore){
+		if (player3score == highScore && playerEntryScript.player3entered){
 			//winningPlayer = 3;
 			if (tieCount > 0) {
 				winningPlayerText += " and Player 3";
@@ -254,7 +262,7 @@ public class roundController : MonoBehaviour {
 			//p3Camera.enabled = true;
 		}
 
-		if (player4score == winningScore){
+		if (player4score == highScore && playerEntryScript.player4entered){
 			//winningPlayer = 4;
 			if (tieCount > 0) {
 				winningPlayerText = " and Player 4";
@@ -269,37 +277,49 @@ public class roundController : MonoBehaviour {
 			tieGame = true;
 		}
 
+		//turn off main camera, enable correct camera later
+		mainCamera.enabled = false;
+		p1Camera.enabled = true;
+
 		//Score Display
 		if (playerCount == 1) {
+			//Solo player
 			//set camera of only player
-			if (player1.activeSelf) {
+			int soloPlayerScore = 0;
+			if (playerEntryScript.player1entered) {
 				p1Camera.enabled = true;
+				soloPlayerScore = player1score;
 			}
-			if (player2.activeSelf) {
+			if (playerEntryScript.player2entered) {
 				p2Camera.enabled = true;
+				soloPlayerScore = player2score;
 			}
-			if (player3.activeSelf) {
+			if (playerEntryScript.player3entered) {
 				p3Camera.enabled = true;
+				soloPlayerScore = player3score;
 			}
-			if (player4.activeSelf) {
+			if (playerEntryScript.player4entered) {
 				p4Camera.enabled = true;
+				soloPlayerScore = player4score;
 			}
 
-			if (highScore == 0) {
-				//solo player, 0 points
-				timerText.text = (winningPlayerText + " starved to death. Alone.");
-			} else {
-				//solo player, score
-				timerText.text = (winningPlayerText + " ate a wholesome " + winningScore + "calories. Alone.");
+			if (soloPlayerScore == 0) {
+				timerText.text += (winningPlayerText + " starved to death. Alone.");
+			}
+			else if (soloPlayerScore < highScore) {
+				//Not working because non-player plate scores are not currently pulled in to scoring system
+				timerText.text += (winningPlayerText + ", despite playing alone, did not have the best sandwich.");
+			}else{
+				timerText.text += (winningPlayerText + " ate a wholesome " + highScore + " calories. Alone.");
 			}
 		} else {
 			if (tieGame) {
 				if (tieCount == playerCount) {
 					mainCamera.enabled = true; // main camera for tie
 					if (highScore == 0) {
-						timerText.text = ("It was a tie. All players managed to starve to death.");
+						timerText.text += ("It was a tie. All players managed to starve to death.");
 					} else {
-						timerText.text = ("All players tied with" + winningScore + "calorie sandwiches.");
+						timerText.text += ("All players tied with" + highScore + "calorie sandwiches.");
 					}
 				} 
 			} else {
@@ -317,10 +337,13 @@ public class roundController : MonoBehaviour {
 					p4Camera.enabled = true;
 				}
 
-				timerText.text = (winningPlayerText + " ate a wholesome winning" + winningScore + " calorie sandwich.");
+				timerText.text += (winningPlayerText + " ate a wholesome winning" + highScore + " calorie sandwich.");
 			}
 		}
-	
+		player1.SetActive(false);
+		player2.SetActive(false);
+		player3.SetActive(false);
+		player4.SetActive(false);
+		isScoreCalculated = true;
 	}
-
 }

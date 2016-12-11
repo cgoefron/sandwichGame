@@ -7,7 +7,7 @@ public class playerEntryScript : MonoBehaviour {
 
 	public Color playerColor;                           // Color assigned to player
 	[HideInInspector] public int playerCount;  		    // Number of players entering game
-	public int playerId = 0;
+	public int playerId;
 	public Player player;
 
 	//hands on screen
@@ -76,6 +76,8 @@ public class playerEntryScript : MonoBehaviour {
 				playerCount++;
 
 		}
+
+			Debug.Log ("Player count =" + playerCount);
 
 		//if player enters game, make a hand move up. Disable once moved.
 		//Need to make a persistant trigger into next scene for available players 
