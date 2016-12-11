@@ -22,6 +22,8 @@ public class plateScript : MonoBehaviour {
 	void Start () {
 		foodValue = 50;
 		plateScore = 0;
+
+		//diff food value for each ingredient
 	}
 	
 	// Update is called once per frame
