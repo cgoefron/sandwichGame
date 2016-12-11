@@ -14,7 +14,7 @@ public class tableEffects : MonoBehaviour {
 
 
 	void Start (){
-		defaultY = transform.position.y;
+		//defaultY = transform.position.y;
 
 
 
@@ -27,8 +27,7 @@ public class tableEffects : MonoBehaviour {
 
 	void OnCollisionEnter(Collision col){
 
-		Debug.Log ("work");
-		
+
 		if (col.gameObject.tag == "Player") {
 
 			Debug.Log ("Table is hit");

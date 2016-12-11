@@ -18,6 +18,7 @@ public class playerController : MonoBehaviour {
 	private RigidbodyConstraints previousConstraints;
 	private float previousX, previousZ;
 	private bool canSlam;
+	private bool isSlamming = false;
 	//private float speed;
 
 	public AudioClip pickupFood;
@@ -29,13 +30,14 @@ public class playerController : MonoBehaviour {
 
 	public GameObject defaultHand;
 	public GameObject grabHand;
-
+	public Transform cameraTransform; 
 
 	// Use this for initialization
 
 	void Awake(){
 
 		player = ReInput.players.GetPlayer(playerId);	
+
 	}
 
 	void Start () {
@@ -55,7 +57,14 @@ public class playerController : MonoBehaviour {
 	void FixedUpdate () {
 
 		Vector2 move = new Vector2 (player.GetAxis ("Horizontal"), player.GetAxis ("Vertical")) * moveSpeed;
-		Vector3 movement = new Vector3 (move.x, rb.velocity.y, move.y);
+		//Vector3 movement = new Vector3 (player.GetAxis ("Horizontal"), rb.velocity.y, player.GetAxis ("Vertical")) * moveSpeed;
+
+		//Vector3 movement = new Vector3 (move.x * cameraTransform.transform.right, rb.velocity.y, move.y * cameraTransform.transform.up);
+		//Vector3 movement = new Vector3 (move.x, rb.velocity.y, move.y);
+		Vector3 movement = new Vector3 (move.x, move.y, rb.velocity.y);
+
+		movement = Camera.main.transform.TransformDirection(movement);
+
 		rb.velocity = movement;
 
 		Slam ();
@@ -66,7 +75,8 @@ public class playerController : MonoBehaviour {
 		}
 
 		if (player.GetButtonUp ("Action1") && theFood) {
-			
+
+
 			//print ("button pressed and dropped food");
 			audio.PlayOneShot (dropFoodTable);
 
@@ -93,7 +103,10 @@ public class playerController : MonoBehaviour {
 			nearFood = true;
 
 			if (player.GetButton ("Action1") && !theFood) {
-				
+
+				//Debug.Log ("player id = " + player.id);
+
+
 				theFood = other.gameObject;
 				theFood.GetComponent<Rigidbody> ().isKinematic = true;
 				theFood.GetComponent<Rigidbody> ().detectCollisions = false;
@@ -136,15 +149,21 @@ public class playerController : MonoBehaviour {
 
 		if (canSlam){
 
-			if (Input.GetKeyDown (KeyCode.Space)) { //add check for Y position before slamming
-				//rb.AddForce(transform.forward * thrust); 
-
-
+			if (player.GetButtonDown ("Action2")) { //add check for Y position before slamming
+				Debug.Log("player starting position =" + transform.position.y);
+				isSlamming = true;
 				// unfreeze y position, add force toward table
 				rb.constraints = RigidbodyConstraints.FreezeRotationY;
+
+				Debug.Log (rb.constraints);
 				previousX = transform.position.x;
 				previousZ = transform.position.z;
-				rb.AddForce (0, (table.transform.position.y - transform.position.y) * thrust, 0);
+				//rb.AddForce (0, (table.transform.position.y - transform.position.y) * thrust, 0);
+				rb.AddForce((transform.up * -1) * thrust); 
+
+				//transform.position = new Vector3(previousX, table.transform.position.y, previousZ);
+				Debug.Log ("table.transform.position.y: " + table.transform.position.y);
+				Debug.Log ("handCollider.transform.position.y: " + handCollider.transform.position.y);
 				// move hand to original y position (yDefault), re-freeze y transform - MOVING TO ONCOLLISIONENTER
 
 
@@ -152,42 +171,53 @@ public class playerController : MonoBehaviour {
 
 
 		}
+		Debug.Log ("Current Velocity: " + rb.velocity.magnitude);
+		Debug.Log ("player position =: " + transform.position.y);
+		CheckSlam (); //Decide if hand has hit table, increase velocity if not
 	}
 
+
+	void CheckSlam(){
+		if (isSlamming) {
+			transform.position = new Vector3(previousX, transform.position.y, previousZ);
+			rb.velocity = rb.velocity * 2;
+			//rb.AddForce (0, (table.transform.position.y - transform.position.y) * thrust, 0);
+			//rb.AddForce((transform.up * -1) * thrust); 
+		}
+
+		//if (handCollider.transform.position.y < table.transform.position.y ) {
+			//if (handCollider.transform.position.y < 0 ) {
+		if (handCollider.transform.position.y < table.transform.position.y ) {
+			isSlamming = false;
+			Debug.Log ("How can she slap REMIX? Y = " + transform.position.y);
+
+			audio.PlayOneShot (slam);
+
+			rb.velocity = Vector3.zero;
+			rb.angularVelocity = Vector3.zero;
+			transform.position = new Vector3(previousX, yDefault, previousZ);
+			rb.constraints = previousConstraints; // set to previous state
+		}
+
+	}
+
+	/*
 	void OnCollisionEnter(Collision col){
 		if (col.gameObject.name == "Table") {
-			//Debug.Log ("How can she slap? Y = " + yDefault);
+			Debug.Log ("How can she slap? Y = " + yDefault);
 		
 			audio.PlayOneShot (slam);
-			transform.position = new Vector3(previousX, yDefault, previousZ);
+			//transform.position = new Vector3(previousX, yDefault, previousZ);
 			//transform.position.y = yDefault; //This doesn't work; need to make temp var, and move towards
-			rb.constraints = previousConstraints; // set to previous state
-
+			//rb.constraints = previousConstraints; // set to previous state
 		}
 		
 	}
-
+	*/
 
 
 	void Update () {
-//		xSpeed = Input.GetAxis("Vertical") * speed * Time.deltaTime; //constrain height
-////
-//		ySpeed = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
-////
-//		transform.Translate(Vector3.left * -xSpeed);
-//		transform.Translate (Vector3.forward * ySpeed);
 
-			/*transform.Rotate(0, (Input.GetAxis("Mouse X") * RotationSpeed),0, Space.World);
-			transform.Rotate( (Input.GetAxis("Mouse Y") * RotationSpeed),0,0, Space.World);
-
-			if(((transform.rotation.eulerAngles.x<180)&&(transform.rotation.eulerAngles.x>90))||
-				((transform.rotation.eulerAngles.z<180)&&(transform.rotation.eulerAngles.z>90))){
-				// preserve Y rotation
-				float currentLook = transform.rotation.eulerAngles.y;
-				// put character to default rotation
-				transform.rotation = Quaternion.identity;
-				// re-introduce Y rotation
-				transform.Rotate(0,0,0); */
 			}
 
 

@@ -17,16 +17,18 @@ public class onPlates : MonoBehaviour {
 		
 		if (other.CompareTag ("Food") && other.isTrigger == true) {
 
-			other.enabled = false;
+			//other.enabled = false;
 		}
 
 	}
 
 	void OnTriggerExit(Collider other){
 		
-		if (other.CompareTag ("Food") && other.isTrigger == true) {
-
-			other.enabled = true;
+		//if (other.CompareTag ("Food") && other.isTrigger == true) {
+		if (other.gameObject.layer == LayerMask.NameToLayer("ScoredFood")) {
+			
+			other.gameObject.layer = LayerMask.NameToLayer ("Food");
+			//other.enabled = true;
 		}
 	}
 }
