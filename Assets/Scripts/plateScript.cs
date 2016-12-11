@@ -17,6 +17,11 @@ public class plateScript : MonoBehaviour {
 	public Text player2text;
 	public Text player3text;
 	public Text player4text;
+
+	public GameObject sparkle1;
+	public GameObject sparkle2;
+	public GameObject sparkle3;
+	public GameObject sparkle4;
 																	
 	// Use this for initialization
 	void Start () {
@@ -51,22 +56,39 @@ public class plateScript : MonoBehaviour {
 				if (gameObject.name == "Plate1") {
 					player1score = plateScore;
 					player1text.text = "" + plateScore;
+					if (plateScore > 1000) {
+						sparkle1.gameObject.SetActive (true);
+					} else {
+						sparkle1.gameObject.SetActive(false);
+					}
 				}
 
 				if (gameObject.name == "Plate2") {
 					player2score = plateScore;
 					player2text.text = "" + plateScore;
-				}
+					if (plateScore > 1000) {
+						sparkle2.gameObject.SetActive (true);
+					} else {
+						sparkle2.gameObject.SetActive(false);
+					}				}
 
 				if (gameObject.name == "Plate3") {
 					player3score = plateScore;
 					player3text.text = "" + plateScore;
-				}
+					if (plateScore > 1000) {
+						sparkle3.gameObject.SetActive (true);
+					} else {
+						sparkle3.gameObject.SetActive(false);
+					}				}
 
 				if (gameObject.name == "Plate4") {
 					player4score = plateScore;
 					player4text.text = "" + plateScore;
-				}
+					if (plateScore >= 1000) {
+						sparkle4.gameObject.SetActive (true);
+					} else {
+						sparkle4.gameObject.SetActive(false);
+					}				}
 
 			}
 
