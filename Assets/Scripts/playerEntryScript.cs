@@ -7,8 +7,10 @@ public class playerEntryScript : MonoBehaviour {
 
 	public Color playerColor;                           // Color assigned to player
 	[HideInInspector] public int playerCount;  		    // Number of players entering game
-	public int playerId;
-	public Player player;
+	public Player player1;
+	public Player player2;
+	public Player player3;
+	public Player player4;
 
 	//hands on screen
 	public GameObject hand1;
@@ -25,7 +27,10 @@ public class playerEntryScript : MonoBehaviour {
 
 	void Awake(){
 
-		player = ReInput.players.GetPlayer(playerId);	
+		player1 = ReInput.players.GetPlayer(0);	
+		player2 = ReInput.players.GetPlayer(1);	
+		player3 = ReInput.players.GetPlayer(2);	
+		player4 = ReInput.players.GetPlayer(3);	
 
 	}
 
@@ -44,34 +49,31 @@ public class playerEntryScript : MonoBehaviour {
 
 		PlayerEntry ();
 
-		if (playerCount>0 && player.GetButtonDown("Start")){ //Map start button
+		if (playerCount>0 && (player1.GetButtonDown("Start") || player2.GetButtonDown("Start") || player3.GetButtonDown("Start") || player4.GetButtonDown("Start"))){ //Map start button
 			SceneManager.LoadScene("GameScene"); //Change to whatever game level is
 		}
 	}
 
 
 	public void PlayerEntry(){
-		if (player.GetButton("Action1")){
-
-		if (playerId == 0) {
-				//Debug.Log ("player 1 pressed A");
-				player1entered = true;
-				playerCount++;
+		if (player1.GetButtonDown("Action1") && player1entered == false){
+			Debug.Log ("player 1 entered");
+			player1entered = true;
+			playerCount++;
 		}
 
-		if (playerId == 1) {
+		if (player2.GetButtonDown("Action1") && player2entered == false) {
 				player2entered = true;
 				playerCount++;
-
 		}
 
-		if (playerId == 2) {
+		if (player3.GetButtonDown("Action1") && player3entered == false) {
 				player3entered = true;
 				playerCount++;
 
 		}
 
-		if (playerId == 3) {
+		if (player4.GetButtonDown("Action1") && player4entered == true) {
 				player4entered = true;
 				playerCount++;
 
@@ -82,5 +84,4 @@ public class playerEntryScript : MonoBehaviour {
 		//if player enters game, make a hand move up. Disable once moved.
 		//Need to make a persistant trigger into next scene for available players 
 	}
-}
 }
