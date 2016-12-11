@@ -150,10 +150,11 @@ public class playerController : MonoBehaviour {
 
 			if (player.GetButton ("Action2")) { //add check for Y position before slamming
 				//rb.AddForce(transform.forward * thrust); 
+				//Debug.Log("player hit B");
 
 
 				// unfreeze y position, add force toward table
-				rb.constraints = RigidbodyConstraints.FreezeRotationY;
+				rb.constraints = RigidbodyConstraints.FreezePositionY;
 				previousX = transform.position.x;
 				previousZ = transform.position.z;
 				rb.AddForce (0, (table.transform.position.y - transform.position.y) * thrust, 0);
@@ -168,7 +169,7 @@ public class playerController : MonoBehaviour {
 
 	void OnCollisionEnter(Collision col){
 		if (col.gameObject.name == "Table") {
-			//Debug.Log ("How can she slap? Y = " + yDefault);
+			Debug.Log ("How can she slap? Y = " + yDefault);
 		
 			audio.PlayOneShot (slam);
 			transform.position = new Vector3(previousX, yDefault, previousZ);
