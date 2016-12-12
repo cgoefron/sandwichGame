@@ -12,6 +12,12 @@ public class tableEffects : MonoBehaviour {
 	private Rigidbody rb;
 	public Camera mainCamera;
 
+	public GameObject player1;
+	public GameObject player2;
+	public GameObject player3;
+	public GameObject player4;
+
+
 
 	void Start (){
 		//defaultY = transform.position.y;
@@ -22,20 +28,24 @@ public class tableEffects : MonoBehaviour {
 
 	void Update() {
 
+//		Debug.Log ("Table is hit");
+//		Detonate ();
+//		mainCamera.GetComponent<CameraShake>().DoShake();
+
 	}
 		
 
 	void OnCollisionEnter(Collision col){
 
 
-		if (col.gameObject.tag == "Player") {
-
-			Debug.Log ("Table is hit");
-			Detonate ();
-			mainCamera.GetComponent<CameraShake>().DoShake();
-			//transform.position = Random.insideUnitCircle * amount * (Time.time * speed);
-			//rb.AddExplosionForce(10, Vector3.zero, 10, 0, ForceMode.Impulse);
-		}
+//		if (col.gameObject.tag == "Player") {
+//
+//			Debug.Log ("Table is hit");
+//			Detonate ();
+//			mainCamera.GetComponent<CameraShake>().DoShake();
+//			//transform.position = Random.insideUnitCircle * amount * (Time.time * speed);
+//			//rb.AddExplosionForce(10, Vector3.zero, 10, 0, ForceMode.Impulse);
+//		}
 
 	}
 

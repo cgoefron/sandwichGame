@@ -36,6 +36,8 @@ public class playerEntryScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		Time.timeScale = 1;
+
 		player1entered = false;
 		player2entered = false;
 		player3entered = false;
