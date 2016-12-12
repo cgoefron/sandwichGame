@@ -11,6 +11,7 @@ public class roundController : MonoBehaviour {
 	private bool isScoreCalculated = false;
 	public Text timerText;
 	private bool paused = false;
+
 	[HideInInspector]public int playerId = 0;
 	[HideInInspector]public Player player;
 	private AudioSource audio;
@@ -83,6 +84,10 @@ public class roundController : MonoBehaviour {
 
 		audio = GetComponent<AudioSource>();
 
+		confetti1.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
+		confetti2.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
+		confetti3.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
+		confetti4.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
 
 		if (playerEntryScript.player1entered) {
 			Debug.Log ("player 1 is entered");
@@ -321,22 +326,22 @@ public class roundController : MonoBehaviour {
 			int soloPlayerScore = 0;
 			if (playerEntryScript.player1entered) {
 				p1Camera.gameObject.SetActive(true);
-				confetti1.gameObject.SetActive(true);
+				confetti1.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
 				soloPlayerScore = player1score;
 			}
 			if (playerEntryScript.player2entered) {
 				p2Camera.gameObject.SetActive(true);
-				confetti2.gameObject.SetActive(true);
+				confetti2.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
 				soloPlayerScore = player2score;
 			}
 			if (playerEntryScript.player3entered) {
 				p3Camera.gameObject.SetActive(true);
-				confetti3.gameObject.SetActive(true);
+				confetti3.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
 				soloPlayerScore = player3score;
 			}
 			if (playerEntryScript.player4entered) {
 				p4Camera.gameObject.SetActive(true);				
-				confetti4.gameObject.SetActive(true);
+				confetti4.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
 				soloPlayerScore = player4score;
 			}
 
@@ -363,19 +368,19 @@ public class roundController : MonoBehaviour {
 				//set camera of only player
 				if (winningPlayer == 1) {
 					p1Camera.gameObject.SetActive(true);
-					confetti1.gameObject.SetActive(true);
+					confetti1.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
 				}
 				if (winningPlayer == 2) {
 					p2Camera.gameObject.SetActive(true);
-					confetti2.gameObject.SetActive(true);
+					confetti2.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
 				}
 				if (winningPlayer == 3) {
 					p3Camera.gameObject.SetActive(true);
-					confetti3.gameObject.SetActive(true);
+					confetti3.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
 				}
 				if (winningPlayer == 4) {
 					p4Camera.gameObject.SetActive(true);
-					confetti4.gameObject.SetActive(true);
+					confetti4.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
 				}
 
 				timerText.text += (winningPlayerText + " ate a wholesome winning " + highScore + " calorie sandwich.");

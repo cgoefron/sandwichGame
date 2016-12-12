@@ -5,7 +5,7 @@ using Rewired;
 
 public class playerEntryScript : MonoBehaviour {
 
-	public Color playerColor;                           // Color assigned to player
+	//public Color playerColor;                           // Color assigned to player
 	[HideInInspector] public int playerCount;  		    // Number of players entering game
 	public Player player1;
 	public Player player2;
@@ -76,6 +76,7 @@ public class playerEntryScript : MonoBehaviour {
 		}
 
 		if (player4.GetButtonDown("Action1") && player4entered == true) {
+			Debug.Log ("player 4 entered");
 				player4entered = true;
 				playerCount++;
 

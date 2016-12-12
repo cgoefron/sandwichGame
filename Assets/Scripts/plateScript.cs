@@ -68,9 +68,9 @@ public class plateScript : MonoBehaviour {
 					player1score = plateScore;
 					player1text.text = "" + plateScore;
 					if (plateScore > 1000) {
-						sparkle1.gameObject.SetActive (true);
+						sparkle1.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
 					} else {
-						sparkle1.gameObject.SetActive(false);
+						sparkle1.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
 					}
 				}
 
@@ -78,27 +78,27 @@ public class plateScript : MonoBehaviour {
 					player2score = plateScore;
 					player2text.text = "" + plateScore;
 					if (plateScore > 1000) {
-						sparkle2.gameObject.SetActive (true);
+						sparkle2.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
 					} else {
-						sparkle2.gameObject.SetActive(false);
+						sparkle2.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
 					}				}
 
 				if (gameObject.name == "Plate3") {
 					player3score = plateScore;
 					player3text.text = "" + plateScore;
 					if (plateScore > 1000) {
-						sparkle3.gameObject.SetActive (true);
+						sparkle3.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
 					} else {
-						sparkle3.gameObject.SetActive(false);
+						sparkle3.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
 					}				}
 
 				if (gameObject.name == "Plate4") {
 					player4score = plateScore;
 					player4text.text = "" + plateScore;
 					if (plateScore >= 1000) {
-						sparkle4.gameObject.SetActive (true);
+						sparkle4.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
 					} else {
-						sparkle4.gameObject.SetActive(false);
+						sparkle4.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
 					}				}
 
 			}
