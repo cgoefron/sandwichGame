@@ -14,7 +14,7 @@ public class tableEffects : MonoBehaviour {
 
 
 	void Start (){
-		defaultY = transform.position.y;
+		//defaultY = transform.position.y;
 
 
 

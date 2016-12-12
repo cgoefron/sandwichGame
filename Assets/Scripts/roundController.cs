@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using Rewired;
+using UnityEngine.SceneManagement;
 
 public class roundController : MonoBehaviour {
 
@@ -32,10 +33,11 @@ public class roundController : MonoBehaviour {
 	private int player4score;
 
 	public Camera mainCamera;
-	public Camera p1Camera;
-	public Camera p2Camera;
-	public Camera p3Camera;
-	public Camera p4Camera;
+
+	public GameObject p1Camera;
+	public GameObject p2Camera;
+	public GameObject p3Camera;
+	public GameObject p4Camera;
 
 	private int[] playerScores;
 	private int highScore;
@@ -43,6 +45,11 @@ public class roundController : MonoBehaviour {
 	private int playerCount = 0;
 	private int tieCount = 0;
 	private bool tieGame = false;
+
+	public GameObject confetti1;
+	public GameObject confetti2;
+	public GameObject confetti3;
+	public GameObject confetti4;
 
 
 	void Awake(){
@@ -61,10 +68,10 @@ public class roundController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		mainCamera.enabled = true;
-		p1Camera.enabled = false;
-		p2Camera.enabled = false;
-		p3Camera.enabled = false;
-		p4Camera.enabled = false;
+//		p1Camera.enabled = false;
+//		p2Camera.enabled = false;
+//		p3Camera.enabled = false;
+//		p4Camera.enabled = false;
 
 		audio = GetComponent<AudioSource>();
 
@@ -111,8 +118,9 @@ public class roundController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		mainCamera.enabled = false;
-		p1Camera.enabled = true;
+//		mainCamera.enabled = false;
+//		//p1Camera.enabled = true;
+//		p1Camera.gameObject.SetActive(true);
 
 		if (!isGameOver) {
 			if (!paused) {
@@ -129,7 +137,11 @@ public class roundController : MonoBehaviour {
 			// yield and then load player wins function
 			if (!isScoreCalculated) {
 				PlayerWins ();
+				//Display restart instructions
 			}
+			//Add check to detect back button to restart game
+			if (Input.GetKey (KeyCode.R) || player.GetButton("Select")) {
+				SceneManager.LoadScene("PlayerSelectScreen");			}
 		}		
 	}
 
@@ -142,12 +154,19 @@ public class roundController : MonoBehaviour {
 				print ("Player has paused");
 				//Stop music
 				audio.Stop();
+				//Display restart instructions
 			} else {		
 				paused = false;
 				Time.timeScale = 1;
 				//play music
 				audio.Play();
+				//Hide restart instructions
 			}
+		}
+		if (paused) {
+			if (Input.GetKey (KeyCode.R) || player.GetButton("Select")) {
+				SceneManager.LoadScene("PlayerSelectScreen");			}
+			//Add check to detect back button to restart game
 		}
 	}
 
@@ -171,9 +190,9 @@ public class roundController : MonoBehaviour {
 		timerText.text = ("Round Over!\n");
 
 		player1score = Plate1.GetComponent<plateScript>().player1score;
-		player2score = Plate1.GetComponent<plateScript>().player2score;
-		player3score = Plate1.GetComponent<plateScript>().player3score;
-		player4score = Plate1.GetComponent<plateScript>().player4score;
+		player2score = Plate2.GetComponent<plateScript>().player2score;
+		player3score = Plate3.GetComponent<plateScript>().player3score;
+		player4score = Plate4.GetComponent<plateScript>().player4score;
 
 		//change camera to winning player
 		playerScores [0] = player1score;
@@ -236,7 +255,6 @@ public class roundController : MonoBehaviour {
 		 	//winningPlayer = 1;
 			winningPlayerText = "Player 1";
 			tieCount +=1;
-			//p1Camera.enabled = true;
 			//Debug.Log (winningPlayer);
 		  }
 
@@ -248,7 +266,6 @@ public class roundController : MonoBehaviour {
 				winningPlayerText = "Player 2";
 			}
 			tieCount +=1;
-			//p2Camera.enabled = true;
 		}
 
 		if (player3score == highScore && playerEntryScript.player3entered){
@@ -259,7 +276,6 @@ public class roundController : MonoBehaviour {
 				winningPlayerText = "Player 3";
 			}
 			tieCount +=1;
-			//p3Camera.enabled = true;
 		}
 
 		if (player4score == highScore && playerEntryScript.player4entered){
@@ -270,7 +286,6 @@ public class roundController : MonoBehaviour {
 				winningPlayerText = "Player 4";
 			}
 			tieCount +=1;
-			//p4Camera.enabled = true;
 		}
 
 		if (tieCount > 1){
@@ -279,7 +294,6 @@ public class roundController : MonoBehaviour {
 
 		//turn off main camera, enable correct camera later
 		mainCamera.enabled = false;
-		p1Camera.enabled = true;
 
 		//Score Display
 		if (playerCount == 1) {
@@ -287,19 +301,23 @@ public class roundController : MonoBehaviour {
 			//set camera of only player
 			int soloPlayerScore = 0;
 			if (playerEntryScript.player1entered) {
-				p1Camera.enabled = true;
+				p1Camera.gameObject.SetActive(true);
+				confetti1.gameObject.SetActive(true);
 				soloPlayerScore = player1score;
 			}
 			if (playerEntryScript.player2entered) {
-				p2Camera.enabled = true;
+				p2Camera.gameObject.SetActive(true);
+				confetti2.gameObject.SetActive(true);
 				soloPlayerScore = player2score;
 			}
 			if (playerEntryScript.player3entered) {
-				p3Camera.enabled = true;
+				p3Camera.gameObject.SetActive(true);
+				confetti3.gameObject.SetActive(true);
 				soloPlayerScore = player3score;
 			}
 			if (playerEntryScript.player4entered) {
-				p4Camera.enabled = true;
+				p4Camera.gameObject.SetActive(true);				
+				confetti4.gameObject.SetActive(true);
 				soloPlayerScore = player4score;
 			}
 
@@ -319,25 +337,29 @@ public class roundController : MonoBehaviour {
 					if (highScore == 0) {
 						timerText.text += ("It was a tie. All players managed to starve to death.");
 					} else {
-						timerText.text += ("All players tied with" + highScore + "calorie sandwiches.");
+						timerText.text += ("All players tied with " + highScore + " calorie sandwiches.");
 					}
 				} 
 			} else {
 				//set camera of only player
 				if (winningPlayer == 1) {
-					p1Camera.enabled = true;
+					p1Camera.gameObject.SetActive(true);
+					confetti1.gameObject.SetActive(true);
 				}
 				if (winningPlayer == 2) {
-					p2Camera.enabled = true;
+					p2Camera.gameObject.SetActive(true);
+					confetti2.gameObject.SetActive(true);
 				}
 				if (winningPlayer == 3) {
-					p3Camera.enabled = true;
+					p3Camera.gameObject.SetActive(true);
+					confetti3.gameObject.SetActive(true);
 				}
 				if (winningPlayer == 4) {
-					p4Camera.enabled = true;
+					p4Camera.gameObject.SetActive(true);
+					confetti4.gameObject.SetActive(true);
 				}
 
-				timerText.text += (winningPlayerText + " ate a wholesome winning" + highScore + " calorie sandwich.");
+				timerText.text += (winningPlayerText + " ate a wholesome winning " + highScore + " calorie sandwich.");
 			}
 		}
 		player1.SetActive(false);
