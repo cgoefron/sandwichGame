@@ -93,6 +93,7 @@ public class roundController : MonoBehaviour {
 		p4scoreUI.SetActive (true);
 
 		audio = GetComponent<AudioSource>();
+		restartText.gameObject.SetActive(false);
 
 		confetti1.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
 		confetti2.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
@@ -161,6 +162,7 @@ public class roundController : MonoBehaviour {
 			if (!isScoreCalculated) {
 				PlayerWins ();
 				//Display restart instructions
+				restartText.gameObject.SetActive(true);
 			}
 			//Add check to detect back button to restart game
 			if (Input.GetKey (KeyCode.R) || player.GetButton("Select")) {
