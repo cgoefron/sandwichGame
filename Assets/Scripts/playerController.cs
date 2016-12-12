@@ -4,7 +4,7 @@ using Rewired;
 
 public class playerController : MonoBehaviour {
 
-	public int playerId = 0;
+	[HideInInspector]public int playerId = 0;
 	public Player player;
 	public Rigidbody rb;
 	public float moveSpeed;
@@ -18,7 +18,7 @@ public class playerController : MonoBehaviour {
 	private RigidbodyConstraints previousConstraints;
 	private float previousX, previousZ;
 	private bool canSlam;
-	private bool isSlamming = false;
+	[HideInInspector]public bool isSlamming = false;
 	//private float speed;
 
 	public AudioClip pickupFood;
@@ -149,21 +149,30 @@ public class playerController : MonoBehaviour {
 
 		if (canSlam){
 
-			if (player.GetButtonDown ("Action2")) { //add check for Y position before slamming
-				Debug.Log("player starting position =" + transform.position.y);
+			if (player.GetButtonDown ("Action2") && !isSlamming) { //add check for Y position before slamming
+
 				isSlamming = true;
-				// unfreeze y position, add force toward table
-				rb.constraints = RigidbodyConstraints.FreezeRotationY;
+				audio.PlayOneShot (slam);
 
-				Debug.Log (rb.constraints);
-				previousX = transform.position.x;
-				previousZ = transform.position.z;
-				//rb.AddForce (0, (table.transform.position.y - transform.position.y) * thrust, 0);
-				rb.AddForce((transform.up * -1) * thrust); 
+				//TODO:
+				//instantiate particle poof
+				//camera shake
+				//set isSlamming = false;
 
-				//transform.position = new Vector3(previousX, table.transform.position.y, previousZ);
-				Debug.Log ("table.transform.position.y: " + table.transform.position.y);
-				Debug.Log ("handCollider.transform.position.y: " + handCollider.transform.position.y);
+
+//				Debug.Log("player starting position =" + transform.position.y);
+//				// unfreeze y position, add force toward table
+//				rb.constraints = RigidbodyConstraints.FreezeRotationY;
+//
+//				Debug.Log (rb.constraints);
+//				previousX = transform.position.x;
+//				previousZ = transform.position.z;
+//				//rb.AddForce (0, (table.transform.position.y - transform.position.y) * thrust, 0);
+//				rb.AddForce((transform.up * -1) * thrust); 
+//
+//				//transform.position = new Vector3(previousX, table.transform.position.y, previousZ);
+//				Debug.Log ("table.transform.position.y: " + table.transform.position.y);
+//				Debug.Log ("handCollider.transform.position.y: " + handCollider.transform.position.y);
 				// move hand to original y position (yDefault), re-freeze y transform - MOVING TO ONCOLLISIONENTER
 
 
@@ -171,35 +180,35 @@ public class playerController : MonoBehaviour {
 
 
 		}
-		Debug.Log ("Current Velocity: " + rb.velocity.magnitude);
-		Debug.Log ("player position =: " + transform.position.y);
-		CheckSlam (); //Decide if hand has hit table, increase velocity if not
+		//Debug.Log ("Current Velocity: " + rb.velocity.magnitude);
+		//Debug.Log ("player position =: " + transform.position.y);
+		//CheckSlam (); //Decide if hand has hit table, increase velocity if not
 	}
 
 
-	void CheckSlam(){
-		if (isSlamming) {
-			transform.position = new Vector3(previousX, transform.position.y, previousZ);
-			rb.velocity = rb.velocity * 2;
-			//rb.AddForce (0, (table.transform.position.y - transform.position.y) * thrust, 0);
-			//rb.AddForce((transform.up * -1) * thrust); 
-		}
-
-		//if (handCollider.transform.position.y < table.transform.position.y ) {
-			//if (handCollider.transform.position.y < 0 ) {
-		if (handCollider.transform.position.y < table.transform.position.y ) {
-			isSlamming = false;
-			Debug.Log ("How can she slap REMIX? Y = " + transform.position.y);
-
-			audio.PlayOneShot (slam);
-
-			rb.velocity = Vector3.zero;
-			rb.angularVelocity = Vector3.zero;
-			transform.position = new Vector3(previousX, yDefault, previousZ);
-			rb.constraints = previousConstraints; // set to previous state
-		}
-
-	}
+//	void CheckSlam(){
+//		if (isSlamming) {
+//			transform.position = new Vector3(previousX, transform.position.y, previousZ);
+//			rb.velocity = rb.velocity * 2;
+//			//rb.AddForce (0, (table.transform.position.y - transform.position.y) * thrust, 0);
+//			//rb.AddForce((transform.up * -1) * thrust); 
+//		}
+//
+//		//if (handCollider.transform.position.y < table.transform.position.y ) {
+//			//if (handCollider.transform.position.y < 0 ) {
+//		if (handCollider.transform.position.y < table.transform.position.y ) {
+//			isSlamming = false;
+//			Debug.Log ("How can she slap REMIX? Y = " + transform.position.y);
+//
+//			audio.PlayOneShot (slam);
+//
+//			rb.velocity = Vector3.zero;
+//			rb.angularVelocity = Vector3.zero;
+//			transform.position = new Vector3(previousX, yDefault, previousZ);
+//			rb.constraints = previousConstraints; // set to previous state
+//		}
+//
+//	}
 
 	/*
 	void OnCollisionEnter(Collision col){

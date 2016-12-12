@@ -11,11 +11,12 @@ public class roundController : MonoBehaviour {
 	private bool isScoreCalculated = false;
 	public Text timerText;
 	private bool paused = false;
-	private int playerId = 0;
-	private Player player;
+	[HideInInspector]public int playerId = 0;
+	[HideInInspector]public Player player;
 	private AudioSource audio;
 	private int winningPlayer;
 	private string winningPlayerText = "";
+	public GameObject restartText;
 
 	public GameObject player1;
 	public GameObject player2;
@@ -51,6 +52,13 @@ public class roundController : MonoBehaviour {
 	public GameObject confetti3;
 	public GameObject confetti4;
 
+	public GameObject p1scoreUI;
+	public GameObject p2scoreUI;
+	public GameObject p3scoreUI;
+	public GameObject p4scoreUI;
+
+
+
 
 	void Awake(){
 	
@@ -68,10 +76,10 @@ public class roundController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		mainCamera.enabled = true;
-//		p1Camera.enabled = false;
-//		p2Camera.enabled = false;
-//		p3Camera.enabled = false;
-//		p4Camera.enabled = false;
+		p1scoreUI.SetActive (true);
+		p2scoreUI.SetActive (true);
+		p3scoreUI.SetActive (true);
+		p4scoreUI.SetActive (true);
 
 		audio = GetComponent<AudioSource>();
 
@@ -146,7 +154,9 @@ public class roundController : MonoBehaviour {
 	}
 
 	void Pause(){
+		
 		if(player.GetButtonDown("Start")){
+			Debug.Log ("Player " + playerId + "hit start");
 			if (!paused) {
 				paused = true;
 				Time.timeScale = 0;
@@ -155,12 +165,16 @@ public class roundController : MonoBehaviour {
 				//Stop music
 				audio.Stop();
 				//Display restart instructions
+				restartText.gameObject.SetActive(true);
+
+
 			} else {		
 				paused = false;
 				Time.timeScale = 1;
 				//play music
 				audio.Play();
 				//Hide restart instructions
+				restartText.gameObject.SetActive(false);
 			}
 		}
 		if (paused) {
@@ -181,6 +195,11 @@ public class roundController : MonoBehaviour {
 
 			GetComponent<AudioSource>().Stop();
 			//print ("DONE!");
+
+			p1scoreUI.SetActive (false);
+			p2scoreUI.SetActive (false);
+			p3scoreUI.SetActive (false);
+			p4scoreUI.SetActive (false);
 		}
 	}
 
