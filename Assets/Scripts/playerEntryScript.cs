@@ -75,7 +75,7 @@ public class playerEntryScript : MonoBehaviour {
 
 		}
 
-		if (player4.GetButtonDown("Action1") && player4entered == true) {
+		if (player4.GetButtonDown("Action1") && player4entered == false) {
 			Debug.Log ("player 4 entered");
 				player4entered = true;
 				playerCount++;
