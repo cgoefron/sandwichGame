@@ -6,6 +6,7 @@ public class plateScript : MonoBehaviour {
 
 	public int plateScore;
 	public int foodValue;
+	public int bonus;
 	//public LayerMask foodMask = -1;
 
 	public int player1score;
@@ -27,8 +28,10 @@ public class plateScript : MonoBehaviour {
 	void Start () {
 		foodValue = 50;
 		plateScore = 0;
-
 		//diff food value for each ingredient
+
+		bonus = 0;
+
 	}
 	
 	// Update is called once per frame
@@ -46,12 +49,20 @@ public class plateScript : MonoBehaviour {
 
 			//if (hit.collider.tag == "Food") { //How do I guarantee this is only added up once?
 			if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Food")){	
-				
-				plateScore = foodValue + plateScore;
+
+				//check its bonus
+				if (hit.collider.gameObject.GetComponent<foodBonus>()!= null) {
+					Debug.Log ("has bonus");
+					bonus = hit.collider.gameObject.GetComponent<foodBonus> ().bonus;
+				}
+
+				plateScore = foodValue + plateScore + bonus;
 				Debug.Log ("score = " + plateScore);
 				//hit.transform.GetComponent<BoxCollider> ().enabled = false;
 				hit.collider.gameObject.layer = LayerMask.NameToLayer ("ScoredFood");
 
+				//reset bonus
+				bonus = 0;
 
 				if (gameObject.name == "Plate1") {
 					player1score = plateScore;

@@ -171,8 +171,8 @@ public class playerController : MonoBehaviour {
 
 
 		}
-		Debug.Log ("Current Velocity: " + rb.velocity.magnitude);
-		Debug.Log ("player position =: " + transform.position.y);
+//		Debug.Log ("Current Velocity: " + rb.velocity.magnitude);
+//		Debug.Log ("player position =: " + transform.position.y);
 		CheckSlam (); //Decide if hand has hit table, increase velocity if not
 	}
 
