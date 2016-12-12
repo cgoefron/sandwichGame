@@ -19,6 +19,11 @@ public class roundController : MonoBehaviour {
 	private string winningPlayerText = "";
 	public GameObject restartText;
 
+	public Player pPlayer1;
+	public Player pPlayer2;
+	public Player pPlayer3;
+	public Player pPlayer4;
+
 	public GameObject player1;
 	public GameObject player2;
 	public GameObject player3;
@@ -63,13 +68,18 @@ public class roundController : MonoBehaviour {
 
 	void Awake(){
 	
-		player = ReInput.players.GetPlayer(playerId);	
+		//player = ReInput.players.GetPlayer(playerId);	
+		pPlayer1 = ReInput.players.GetPlayer(0);	
+		pPlayer2 = ReInput.players.GetPlayer(1);	
+		pPlayer3 = ReInput.players.GetPlayer(2);	
+		pPlayer4 = ReInput.players.GetPlayer(3);	
 
 	//Set all objects to false?
 		player1.SetActive(false);
 		player2.SetActive(false);
 		player3.SetActive(false);
 		player4.SetActive(false);
+		confetti1.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
 
 		playerScores = new int[4];
 	}
@@ -160,7 +170,7 @@ public class roundController : MonoBehaviour {
 
 	void Pause(){
 		
-		if(player.GetButtonDown("Start")){
+		if(pPlayer1.GetButtonDown("Start") || pPlayer2.GetButtonDown("Start") || pPlayer3.GetButtonDown("Start") || pPlayer4.GetButtonDown("Start")){
 			Debug.Log ("Player " + playerId + "hit start");
 			if (!paused) {
 				paused = true;
@@ -182,8 +192,9 @@ public class roundController : MonoBehaviour {
 				restartText.gameObject.SetActive(false);
 			}
 		}
+
 		if (paused) {
-			if (Input.GetKey (KeyCode.R) || player.GetButton("Select")) {
+			if (Input.GetKey (KeyCode.R) || pPlayer1.GetButton("Select") || pPlayer2.GetButton("Select") || pPlayer3.GetButton("Select") || pPlayer4.GetButton("Select")) {
 				SceneManager.LoadScene("PlayerSelectScreen");			}
 			//Add check to detect back button to restart game
 		}
@@ -223,6 +234,9 @@ public class roundController : MonoBehaviour {
 		playerScores [1] = player2score;
 		playerScores [2] = player3score;
 		playerScores [3] = player4score;
+
+		restartText.gameObject.SetActive(true);
+
 
 		/*
 		if (playerEntryScript.player1entered) {
