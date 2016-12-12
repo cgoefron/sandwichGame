@@ -21,6 +21,7 @@ public class tableEffects : MonoBehaviour {
 
 	void Start (){
 		//defaultY = transform.position.y;
+		//player1.<GetComponent>(playerController)
 
 
 
@@ -32,6 +33,17 @@ public class tableEffects : MonoBehaviour {
 //		Detonate ();
 //		mainCamera.GetComponent<CameraShake>().DoShake();
 
+
+
+	}
+
+	void SlamState(){
+//		if (player1.GetButtonDown("Action1") && player1entered == false){
+//			Debug.Log ("player 1 entered");
+//			player1entered = true;
+//			playerCount++;
+//		}
+	
 	}
 		
 
