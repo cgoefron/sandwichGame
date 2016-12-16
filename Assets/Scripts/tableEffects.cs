@@ -50,9 +50,13 @@ public class tableEffects : MonoBehaviour {
 	}
 
 	void SlamState(){
+
+		if (player1.GetComponent<playerController> ().isSlamming || player2.GetComponent<playerController> ().isSlamming || player3.GetComponent<playerController> ().isSlamming || player4.GetComponent<playerController> ().isSlamming) {
+			isSlamming = true;
+		}
 		
 		//if (player1.GetButtonDown("Action1") && player1entered == false){
-		if (player1.GetComponent<playerController> ().isSlamming && canSlam) {
+		if (isSlamming && canSlam) {
 
 			//Debug.Log ("player 1 entered");
 			//player1entered = true;
@@ -68,7 +72,7 @@ public class tableEffects : MonoBehaviour {
 			StartCoroutine(SlamEffect(1f, 15f));
 		}
 
-		else if(!player1.GetComponent<playerController> ().isSlamming) {
+		else if(!isSlamming) {
 			
 			transform.position = OriginPos;
 			//mainCamera.GetComponent<CameraShake> ().Shaking = false;
@@ -112,12 +116,12 @@ public class tableEffects : MonoBehaviour {
 //		for(float i = 0f; i < shakeTime; i += 0.1f)
 //		{
 
-			if (player1.GetComponent<playerController> ().isSlamming) {
+			if (isSlamming) {
 
 				yield return new WaitForSeconds (shakeTime);
 				Debug.Log ("stop slam");
 				//stop camera shaking
-				player1.GetComponent<playerController> ().isSlamming = false;
+				isSlamming = false;
 				mainCamera.GetComponent<CameraShake> ().Shaking = false;
 
 				canSlam = false;

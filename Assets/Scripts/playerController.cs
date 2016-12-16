@@ -87,7 +87,7 @@ public class playerController : MonoBehaviour {
 
 			isGrabbing = false;
 
-			canSlam = true; //After dropping food, player can slam again
+			//canSlam = true; //After dropping food, player can slam again
 
 			//turn off grabbingHand and turn on regular hand
 			grabHand.SetActive(false);
@@ -101,6 +101,8 @@ public class playerController : MonoBehaviour {
 
 		if (other.CompareTag("Food")) {
 			nearFood = true;
+
+			Debug.Log ("canSlam " + canSlam);
 
 			if (player.GetButton ("Action1") && !theFood) {
 
@@ -121,8 +123,10 @@ public class playerController : MonoBehaviour {
 				canSlam = false;
 
 				//Unless it's a ketchup or mustard packet
-				if (other.gameObject.name == "ketchup" || other.gameObject.name == "mustard") {
+				if (isGrabbing && (other.gameObject.name == "ketchup" || other.gameObject.name == "mustard")) {
 					canSlam = true;
+				} else {
+					canSlam = false;
 				}
 
 				//turn off hand and turn on grabbingHand
