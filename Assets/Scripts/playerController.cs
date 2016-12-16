@@ -49,7 +49,7 @@ public class playerController : MonoBehaviour {
 		previousZ = transform.position.z;
 		yDefault = transform.position.y;
 		isGrabbing = false;
-		canSlam = true;
+		canSlam = false;
 		//speed = 5f;
 	}
 
@@ -154,27 +154,32 @@ public class playerController : MonoBehaviour {
 				isSlamming = true;
 				audio.PlayOneShot (slam);
 
-				//TODO:
-				//instantiate particle poof
-				//camera shake
-				isSlamming = false;
+//				Debug.Log ("slam now " + isSlamming);
 
-
+//				TODO:
+//				instantiate particle poof
+//				camera shake
+//
 //				Debug.Log("player starting position =" + transform.position.y);
 //				// unfreeze y position, add force toward table
-//				rb.constraints = RigidbodyConstraints.FreezeRotationY;
+//				rb.constraints &= ~RigidbodyConstraints.FreezeRotationY;
 //
 //				Debug.Log (rb.constraints);
 //				previousX = transform.position.x;
 //				previousZ = transform.position.z;
 //				//rb.AddForce (0, (table.transform.position.y - transform.position.y) * thrust, 0);
 //				rb.AddForce((transform.up * -1) * thrust); 
-//
-//				//transform.position = new Vector3(previousX, table.transform.position.y, previousZ);
+
+				//transform.position = new Vector3(previousX, table.transform.position.y, previousZ);
 //				Debug.Log ("table.transform.position.y: " + table.transform.position.y);
 //				Debug.Log ("handCollider.transform.position.y: " + handCollider.transform.position.y);
-				// move hand to original y position (yDefault), re-freeze y transform - MOVING TO ONCOLLISIONENTER
 
+				//move hand to original y position (yDefault), re-freeze y transform - MOVING TO ONCOLLISIONENTER
+				//transform.position = new Vector3(transform.position.x, yDefault, transform.position.z);
+				//rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionY;
+//				isSlamming = false;
+
+				//CheckSlam ();
 
 			}
 
@@ -185,8 +190,9 @@ public class playerController : MonoBehaviour {
 		//CheckSlam (); //Decide if hand has hit table, increase velocity if not
 	}
 
-
+//
 //	void CheckSlam(){
+//		
 //		if (isSlamming) {
 //			transform.position = new Vector3(previousX, transform.position.y, previousZ);
 //			rb.velocity = rb.velocity * 2;

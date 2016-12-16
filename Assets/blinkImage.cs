@@ -12,7 +12,7 @@ public class blinkImage : MonoBehaviour {
 	bool startFlashing = false;
 
 	void Start(){
-		StartCoroutine(Flash(10f));
+		StartCoroutine(Flash(10000f));
 	}
 
 	void Update()
@@ -53,6 +53,7 @@ public class blinkImage : MonoBehaviour {
 				image.SetActive (false);
 				yield return new WaitForSeconds (0.3f);
 			}
+				
 		}
 	}
 
