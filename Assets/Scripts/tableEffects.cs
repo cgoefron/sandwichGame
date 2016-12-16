@@ -30,6 +30,7 @@ public class tableEffects : MonoBehaviour {
 		//defaultX = transform.position.x;
 
 		OriginPos = transform.position;
+		canSlam = true;
 		//p1 = player1.GetComponent<playerController> ();
 
 	}
@@ -51,21 +52,20 @@ public class tableEffects : MonoBehaviour {
 	void SlamState(){
 		
 		//if (player1.GetButtonDown("Action1") && player1entered == false){
-		if (player1.GetComponent<playerController> ().isSlamming) {
+		if (player1.GetComponent<playerController> ().isSlamming && canSlam) {
 
-			canSlam = false;
 			//Debug.Log ("player 1 entered");
 			//player1entered = true;
 			//playerCount++;
 //			Debug.Log ("slamming now");
+
 			Detonate ();
 			mainCamera.GetComponent<CameraShake> ().Shaking = true;
-			transform.position = new Vector2 (OriginPos.x, OriginPos.z) + Random.insideUnitCircle * amount * (Time.time * speed);
+//			transform.position = new Vector2 (OriginPos.x, OriginPos.z) + Random.insideUnitCircle * amount * (Time.time * speed);
+			//transform.position = Random.insideUnitCircle.normalized * amount;
 			//rb.AddExplosionForce (10, Vector3.zero, 10, 0, ForceMode.Impulse);
 
-			StartCoroutine(SlamEffect(2f));
-
-
+			StartCoroutine(SlamEffect(1f, 15f));
 		}
 
 		else if(!player1.GetComponent<playerController> ().isSlamming) {
@@ -106,24 +106,28 @@ public class tableEffects : MonoBehaviour {
 		}
 	}
 
-	IEnumerator SlamEffect(float timeGap)
+	IEnumerator SlamEffect(float shakeTime, float slamTimeGap)
 	{
 
-		for(float i = 0f; i < timeGap + 5f; i += 0.1f)
-		{
+//		for(float i = 0f; i < shakeTime; i += 0.1f)
+//		{
 
 			if (player1.GetComponent<playerController> ().isSlamming) {
 
-				yield return new WaitForSeconds (timeGap);
+				yield return new WaitForSeconds (shakeTime);
 				Debug.Log ("stop slam");
+				//stop camera shaking
 				player1.GetComponent<playerController> ().isSlamming = false;
+				mainCamera.GetComponent<CameraShake> ().Shaking = false;
+
+				canSlam = false;
 			}
-		}
+		//}
 
 
 		if (!isSlamming && !canSlam) {
 				
-			yield return new WaitForSeconds (timeGap * 100);
+			yield return new WaitForSeconds (slamTimeGap);
 			canSlam = true;
 			Debug.Log ("can slam Again");
 
