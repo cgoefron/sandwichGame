@@ -12,7 +12,9 @@ public class CameraShake : MonoBehaviour {
 
 	void Start()
 	{
-		Shaking = false;   
+		Shaking = false;
+		OriginalPos = transform.position;
+		OriginalRot = transform.rotation;
 	}
 
 
@@ -31,14 +33,19 @@ public class CameraShake : MonoBehaviour {
 		}
 		else if (Shaking)
 		{
-			Shaking = false;  
+			Shaking = false;
+		}
+
+		if (!Shaking) {
+			transform.position = OriginalPos;
+			transform.rotation = OriginalRot;
 		}
 	}
 
 	public void DoShake()
 	{
-		OriginalPos = transform.position; //need to fix this so it always returns to correct position
-		OriginalRot = transform.rotation;
+//		OriginalPos = transform.position; //need to fix this so it always returns to correct position
+//		OriginalRot = transform.rotation;
 
 		ShakeIntensity = 0.05f;
 		ShakeDecay = 0.04f;

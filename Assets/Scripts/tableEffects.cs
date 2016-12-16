@@ -17,13 +17,14 @@ public class tableEffects : MonoBehaviour {
 	public GameObject player3;
 	public GameObject player4;
 
+	//GameObject p1;
 
+	bool player1entered;
+	int playerCount;
 
 	void Start (){
-		//defaultY = transform.position.y;
-		//player1.<GetComponent>(playerController)
-
-
+		defaultY = transform.position.y;
+		//p1 = player1.GetComponent<playerController> ();
 
 	}
 
@@ -32,17 +33,20 @@ public class tableEffects : MonoBehaviour {
 //		Debug.Log ("Table is hit");
 //		Detonate ();
 //		mainCamera.GetComponent<CameraShake>().DoShake();
-
-
+//
+		//SlamState ();
 
 	}
 
 	void SlamState(){
-//		if (player1.GetButtonDown("Action1") && player1entered == false){
-//			Debug.Log ("player 1 entered");
-//			player1entered = true;
-//			playerCount++;
-//		}
+		
+		//if (player1.GetButtonDown("Action1") && player1entered == false){
+		if (player1.GetComponent<playerController> ().isSlamming && player1entered == false){
+				
+			Debug.Log ("player 1 entered");
+			player1entered = true;
+			playerCount++;
+		}
 	
 	}
 		
@@ -50,14 +54,14 @@ public class tableEffects : MonoBehaviour {
 	void OnCollisionEnter(Collision col){
 
 
-//		if (col.gameObject.tag == "Player") {
-//
-//			Debug.Log ("Table is hit");
-//			Detonate ();
-//			mainCamera.GetComponent<CameraShake>().DoShake();
-//			//transform.position = Random.insideUnitCircle * amount * (Time.time * speed);
-//			//rb.AddExplosionForce(10, Vector3.zero, 10, 0, ForceMode.Impulse);
-//		}
+		if (col.gameObject.tag == "Player") {
+
+			Debug.Log ("Table is hit");
+			Detonate ();
+			mainCamera.GetComponent<CameraShake>().Shaking = true;
+			transform.position = Random.insideUnitCircle * amount * (Time.time * speed);
+			rb.AddExplosionForce(10, Vector3.zero, 10, 0, ForceMode.Impulse);
+		}
 
 	}
 

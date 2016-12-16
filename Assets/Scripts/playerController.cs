@@ -157,7 +157,7 @@ public class playerController : MonoBehaviour {
 				//TODO:
 				//instantiate particle poof
 				//camera shake
-				//set isSlamming = false;
+				isSlamming = false;
 
 
 //				Debug.Log("player starting position =" + transform.position.y);
