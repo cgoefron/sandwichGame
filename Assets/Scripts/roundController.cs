@@ -19,11 +19,6 @@ public class roundController : MonoBehaviour {
 	private string winningPlayerText = "";
 	public GameObject restartText;
 
-	public Player pPlayer1;
-	public Player pPlayer2;
-	public Player pPlayer3;
-	public Player pPlayer4;
-
 	public GameObject player1;
 	public GameObject player2;
 	public GameObject player3;
@@ -68,18 +63,13 @@ public class roundController : MonoBehaviour {
 
 	void Awake(){
 	
-		//player = ReInput.players.GetPlayer(playerId);	
-		pPlayer1 = ReInput.players.GetPlayer(0);	
-		pPlayer2 = ReInput.players.GetPlayer(1);	
-		pPlayer3 = ReInput.players.GetPlayer(2);	
-		pPlayer4 = ReInput.players.GetPlayer(3);	
+		player = ReInput.players.GetPlayer(playerId);	
 
 	//Set all objects to false?
 		player1.SetActive(false);
 		player2.SetActive(false);
 		player3.SetActive(false);
 		player4.SetActive(false);
-		confetti1.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
 
 		playerScores = new int[4];
 	}
@@ -163,6 +153,7 @@ public class roundController : MonoBehaviour {
 				PlayerWins ();
 				//Display restart instructions
 				restartText.gameObject.SetActive(true);
+
 			}
 			//Add check to detect back button to restart game
 			if (Input.GetKey (KeyCode.R) || player.GetButton("Select")) {
@@ -172,7 +163,7 @@ public class roundController : MonoBehaviour {
 
 	void Pause(){
 		
-		if(pPlayer1.GetButtonDown("Start") || pPlayer2.GetButtonDown("Start") || pPlayer3.GetButtonDown("Start") || pPlayer4.GetButtonDown("Start")){
+		if(player.GetButtonDown("Start")){
 			Debug.Log ("Player " + playerId + "hit start");
 			if (!paused) {
 				paused = true;
@@ -194,9 +185,8 @@ public class roundController : MonoBehaviour {
 				restartText.gameObject.SetActive(false);
 			}
 		}
-
 		if (paused) {
-			if (Input.GetKey (KeyCode.R) || pPlayer1.GetButton("Select") || pPlayer2.GetButton("Select") || pPlayer3.GetButton("Select") || pPlayer4.GetButton("Select")) {
+			if (Input.GetKey (KeyCode.R) || player.GetButton("Select")) {
 				SceneManager.LoadScene("PlayerSelectScreen");			}
 			//Add check to detect back button to restart game
 		}
