@@ -19,11 +19,18 @@ public class plateScript : MonoBehaviour {
 	public Text player3text;
 	public Text player4text;
 
-	public GameObject sparkle1;
-	public GameObject sparkle2;
-	public GameObject sparkle3;
-	public GameObject sparkle4;
-																	
+	public GameObject sparklePrefab1;
+	public GameObject sparklePrefab2;
+	public GameObject sparklePrefab3;
+	public GameObject sparklePrefab4;
+
+//	ParticleSystem sparkle1 = sparklePrefab1.GetComponent<ParticleSystem>();
+//	ParticleSystem sparkle2 = sparklePrefab2.GetComponent<ParticleSystem>();
+//	ParticleSystem sparkle3 = sparklePrefab3.GetComponent<ParticleSystem>();
+//	ParticleSystem sparkle4 = sparklePrefab4.GetComponent<ParticleSystem>();
+
+
+																		
 	// Use this for initialization
 	void Start () {
 		foodValue = 50;
@@ -32,10 +39,17 @@ public class plateScript : MonoBehaviour {
 
 		bonus = 0;
 
+		sparklePrefab1.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
+		sparklePrefab2.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
+		sparklePrefab3.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
+		sparklePrefab4.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+
 
 			RaycastHit[] hits;
 		hits = Physics.RaycastAll(transform.position, transform.up, 100.0F, LayerMask.GetMask("Food"), QueryTriggerInteraction.Ignore);
@@ -68,9 +82,11 @@ public class plateScript : MonoBehaviour {
 					player1score = plateScore;
 					player1text.text = "" + plateScore;
 					if (plateScore > 1000) {
-						sparkle1.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
+						sparklePrefab1.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
+
 					} else {
-						sparkle1.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
+						sparklePrefab1.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
+
 					}
 				}
 
@@ -78,27 +94,28 @@ public class plateScript : MonoBehaviour {
 					player2score = plateScore;
 					player2text.text = "" + plateScore;
 					if (plateScore > 1000) {
-						sparkle2.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
+						sparklePrefab2.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
+	
 					} else {
-						sparkle2.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
+						sparklePrefab2.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
 					}				}
 
 				if (gameObject.name == "Plate3") {
 					player3score = plateScore;
 					player3text.text = "" + plateScore;
 					if (plateScore > 1000) {
-						sparkle3.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
+						sparklePrefab3.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
 					} else {
-						sparkle3.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
+						sparklePrefab3.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
 					}				}
 
 				if (gameObject.name == "Plate4") {
 					player4score = plateScore;
 					player4text.text = "" + plateScore;
 					if (plateScore >= 1000) {
-						sparkle4.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
+						sparklePrefab4.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
 					} else {
-						sparkle4.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
+						sparklePrefab4.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
 					}				}
 
 			}
@@ -112,9 +129,17 @@ public class plateScript : MonoBehaviour {
 		//if (other.CompareTag ("Food") && other.isTrigger == true) {
 		if (other.gameObject.layer == LayerMask.NameToLayer("ScoredFood")) {
 
+			//check its bonus
+			if (other.gameObject.GetComponent<foodBonus>()!= null) {
+				Debug.Log ("has bonus");
+				bonus = other.gameObject.GetComponent<foodBonus> ().bonus;
+			}
+
 			other.gameObject.layer = LayerMask.NameToLayer ("Food");
-			plateScore = plateScore - foodValue;
+			plateScore = plateScore - foodValue - bonus;
 			Debug.Log ("score = " + plateScore);
+
+			bonus = 0;
 
 
 			if (gameObject.name == "Plate1") {

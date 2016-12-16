@@ -64,6 +64,8 @@ public class roundController : MonoBehaviour {
 	void Awake(){
 	
 		player = ReInput.players.GetPlayer(playerId);	
+		//player = ReInput.players.GetPlayerIds(playerId);	
+
 
 	//Set all objects to false?
 		player1.SetActive(false);
@@ -228,7 +230,7 @@ public class roundController : MonoBehaviour {
 		playerScores [3] = player4score;
 
 		restartText.gameObject.SetActive(true);
-
+		      
 
 		/*
 		if (playerEntryScript.player1entered) {
