@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using Rewired;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class roundController : MonoBehaviour {
 
@@ -58,7 +59,7 @@ public class roundController : MonoBehaviour {
 	public GameObject p3scoreUI;
 	public GameObject p4scoreUI;
 
-
+	private bool GetButtonDownAllPlayers;
 
 
 	void Awake(){
@@ -74,6 +75,11 @@ public class roundController : MonoBehaviour {
 		player4.SetActive(false);
 
 		playerScores = new int[4];
+
+	}
+		
+	void OnPausePressed(Rewired.InputActionEventData data) {
+		Debug.Log("Pause!");
 	}
 
 	// Use this for initialization
@@ -138,6 +144,8 @@ public class roundController : MonoBehaviour {
 //		//p1Camera.enabled = true;
 //		p1Camera.gameObject.SetActive(true);
 
+
+
 		if (!isGameOver) {
 			if (!paused) {
 				timerText.text = "" + timeLeft.ToString ("f0");
@@ -149,6 +157,7 @@ public class roundController : MonoBehaviour {
 			//print (timeLeft);
 
 			RoundEndCheck ();
+
 		} else {
 			// yield and then load player wins function
 			if (!isScoreCalculated) {
@@ -158,14 +167,26 @@ public class roundController : MonoBehaviour {
 
 			}
 			//Add check to detect back button to restart game
-			if (Input.GetKey (KeyCode.R) || player.GetButton("Select")) {
-				SceneManager.LoadScene("PlayerSelectScreen");			}
+
+			IList<Rewired.Player> players = Rewired.ReInput.players.Players;
+			for (int i = 0; i < players.Count; i++) {
+
+				//if (Input.GetKey (KeyCode.R) || player.GetButton ("Select")) { //CHANGE THIS BACK IF RESTART NOT WORKING
+				if (players[i].GetButtonDown("Select")) {
+					SceneManager.LoadScene ("PlayerSelectScreen");
+				}
+			}
 		}		
 	}
 
 	void Pause(){
-		
-		if(player.GetButtonDown("Start")){
+
+
+		IList<Rewired.Player> players = Rewired.ReInput.players.Players;
+		for(int i = 0; i < players.Count; i++) {
+
+			//if(player.GetButtonDown("Start")){ //CHANGE THIS BACK IF RESTART NOT WORKING
+			if(players[i].GetButtonDown("Start")){
 			Debug.Log ("Player " + playerId + "hit start");
 			if (!paused) {
 				paused = true;
@@ -188,12 +209,13 @@ public class roundController : MonoBehaviour {
 			}
 		}
 		if (paused) {
-			if (Input.GetKey (KeyCode.R) || player.GetButton("Select")) {
+			//if (Input.GetKey (KeyCode.R) || player.GetButton("Select")) { //CHANGE THIS BACK IF RESTART NOT WORKING
+				if (players[i].GetButtonDown("Select")) {
 				SceneManager.LoadScene("PlayerSelectScreen");			}
 			//Add check to detect back button to restart game
 		}
 	}
-
+	}
 
 
 	void RoundEndCheck(){
