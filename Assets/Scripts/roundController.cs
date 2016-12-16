@@ -144,6 +144,8 @@ public class roundController : MonoBehaviour {
 //		//p1Camera.enabled = true;
 //		p1Camera.gameObject.SetActive(true);
 
+
+
 		if (!isGameOver) {
 			if (!paused) {
 				timerText.text = "" + timeLeft.ToString ("f0");
@@ -165,8 +167,15 @@ public class roundController : MonoBehaviour {
 
 			}
 			//Add check to detect back button to restart game
-			if (Input.GetKey (KeyCode.R) || player.GetButton("Select")) {
-				SceneManager.LoadScene("PlayerSelectScreen");			}
+
+			IList<Rewired.Player> players = Rewired.ReInput.players.Players;
+			for (int i = 0; i < players.Count; i++) {
+
+				//if (Input.GetKey (KeyCode.R) || player.GetButton ("Select")) { //CHANGE THIS BACK IF RESTART NOT WORKING
+				if (players[i].GetButtonDown("Select")) {
+					SceneManager.LoadScene ("PlayerSelectScreen");
+				}
+			}
 		}		
 	}
 
