@@ -54,14 +54,14 @@ public class tableEffects : MonoBehaviour {
 	void OnCollisionEnter(Collision col){
 
 
-		if (col.gameObject.tag == "Player") {
-
-			Debug.Log ("Table is hit");
-			Detonate ();
-			mainCamera.GetComponent<CameraShake>().Shaking = true;
-			transform.position = Random.insideUnitCircle * amount * (Time.time * speed);
-			rb.AddExplosionForce(10, Vector3.zero, 10, 0, ForceMode.Impulse);
-		}
+//		if (col.gameObject.tag == "Player") {
+//
+//			Debug.Log ("Table is hit");
+//			Detonate ();
+//			mainCamera.GetComponent<CameraShake>().Shaking = true;
+//			transform.position = Random.insideUnitCircle * amount * (Time.time * speed);
+//			rb.AddExplosionForce(10, Vector3.zero, 10, 0, ForceMode.Impulse);
+//		}
 
 	}
 
