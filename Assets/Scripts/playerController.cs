@@ -99,7 +99,7 @@ public class playerController : MonoBehaviour {
 
 	void OnTriggerStay(Collider other){
 
-		if (other.CompareTag("Food")) {
+		if (other.CompareTag("Food") || other.CompareTag("Condiment")) {
 			nearFood = true;
 
 			Debug.Log ("canSlam " + canSlam);
@@ -123,7 +123,11 @@ public class playerController : MonoBehaviour {
 				canSlam = false;
 
 				//Unless it's a ketchup or mustard packet
-				if (isGrabbing && (other.gameObject.name == "ketchup" || other.gameObject.name == "mustard")) {
+				//if (isGrabbing && (other.gameObject.name == "ketchup" || other.gameObject.name == "mustard")) {
+
+
+				if (isGrabbing && other.CompareTag ("Condiment")) {
+					
 					canSlam = true;
 				} else {
 					canSlam = false;
