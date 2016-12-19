@@ -20,7 +20,8 @@ public class tableEffects : MonoBehaviour {
 
 	bool isSlamming;
 	bool canSlam;
-	//GameObject p1;
+
+	public GameObject slamText;
 
 	bool player1entered;
 	public float amount, speed;
@@ -52,16 +53,19 @@ public class tableEffects : MonoBehaviour {
 	void SlamState(){
 
 		if (player1.GetComponent<playerController> ().isSlamming || player2.GetComponent<playerController> ().isSlamming || player3.GetComponent<playerController> ().isSlamming || player4.GetComponent<playerController> ().isSlamming) {
-			isSlamming = true;
-		}
-		
-		//if (player1.GetButtonDown("Action1") && player1entered == false){
-		if (isSlamming && canSlam) {
 
-			//Debug.Log ("player 1 entered");
-			//player1entered = true;
-			//playerCount++;
-//			Debug.Log ("slamming now");
+			isSlamming = true;
+		
+		} else if(!player1.GetComponent<playerController> ().isSlamming && !player2.GetComponent<playerController> ().isSlamming && !player3.GetComponent<playerController> ().isSlamming && !player4.GetComponent<playerController> ().isSlamming) {
+
+			isSlamming = false;
+
+		}
+
+		Debug.Log ("isSlamming " + isSlamming);
+
+
+		if (isSlamming && canSlam) {
 
 			Detonate ();
 			mainCamera.GetComponent<CameraShake> ().Shaking = true;
@@ -74,8 +78,8 @@ public class tableEffects : MonoBehaviour {
 
 		else if(!isSlamming) {
 			
-			transform.position = OriginPos;
-			//mainCamera.GetComponent<CameraShake> ().Shaking = false;
+			//transform.position = OriginPos;
+			mainCamera.GetComponent<CameraShake> ().Shaking = false;
 
 		}
 	
@@ -104,7 +108,7 @@ public class tableEffects : MonoBehaviour {
 
 			Rigidbody rb = col.GetComponent<Rigidbody> ();
 
-			if (rb != null && col.gameObject.CompareTag ("Food")) {//every food's rb
+			if (rb != null) {//every food's rb
 				rb.AddExplosionForce (power, explosionPos, radius, air);
 			}
 		}
@@ -116,16 +120,23 @@ public class tableEffects : MonoBehaviour {
 //		for(float i = 0f; i < shakeTime; i += 0.1f)
 //		{
 
-			if (isSlamming) {
+		if (isSlamming) {
 
-				yield return new WaitForSeconds (shakeTime);
-				Debug.Log ("stop slam");
-				//stop camera shaking
-				isSlamming = false;
-				mainCamera.GetComponent<CameraShake> ().Shaking = false;
+			yield return new WaitForSeconds (shakeTime);
+//			Debug.Log ("stop slam");
+			//stop camera shaking
+			isSlamming = false;
+			mainCamera.GetComponent<CameraShake> ().Shaking = false;
 
-				canSlam = false;
-			}
+			player1.GetComponent<playerController> ().isSlamming = false;
+			player2.GetComponent<playerController> ().isSlamming = false;
+			player3.GetComponent<playerController> ().isSlamming = false;
+			player4.GetComponent<playerController> ().isSlamming = false;
+
+			canSlam = false;
+			slamText.gameObject.SetActive(false);
+
+		}
 		//}
 
 
@@ -133,7 +144,8 @@ public class tableEffects : MonoBehaviour {
 				
 			yield return new WaitForSeconds (slamTimeGap);
 			canSlam = true;
-			Debug.Log ("can slam Again");
+		//	Debug.Log ("can slam Again");
+			slamText.gameObject.SetActive(true);
 
 
 		}

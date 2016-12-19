@@ -73,7 +73,8 @@ public class foodSpawn : MonoBehaviour {
 
 		if (randomNumber <= breakPercent) {
 
-			Instantiate (foodObjects [UnityEngine.Random.Range (2, foodObjects.Length)], transform.position, transform.rotation);
+			//Instantiate (foodObjects [UnityEngine.Random.Range (2, foodObjects.Length)], transform.position, transform.rotation);
+			Instantiate (foodObjects [UnityEngine.Random.Range (0, foodObjects.Length)], transform.position, transform.rotation);
 
 		} else {
 			//Debug.Log ("object skipped: " + randomNumber);
@@ -91,7 +92,7 @@ public class foodSpawn : MonoBehaviour {
 
 		if (randomNumber <= breakPercent) {
 
-			Instantiate (foodObjects [UnityEngine.Random.Range (0,1)], transform.position, transform.rotation);
+			//Instantiate (foodObjects [UnityEngine.Random.Range (0,1)], transform.position, transform.rotation);
 
 			//longer time to spawn bread tops
 			breadMaxTime++;

@@ -86,7 +86,7 @@ public class playerController : MonoBehaviour {
 			theFood = null;
 
 			isGrabbing = false;
-
+			canSlam = false;
 			//canSlam = true; //After dropping food, player can slam again
 
 			//turn off grabbingHand and turn on regular hand
@@ -94,20 +94,18 @@ public class playerController : MonoBehaviour {
 			defaultHand.SetActive (true);
 
 		}
+			
 	}
 		
 
 	void OnTriggerStay(Collider other){
 
-		if (other.CompareTag("Food")) {
+		if (other.CompareTag("Food") || other.CompareTag ("Sauce")) {
 			nearFood = true;
-
-			Debug.Log ("canSlam " + canSlam);
 
 			if (player.GetButton ("Action1") && !theFood) {
 
 				//Debug.Log ("player id = " + player.id);
-
 
 				theFood = other.gameObject;
 				theFood.GetComponent<Rigidbody> ().isKinematic = true;
@@ -120,14 +118,7 @@ public class playerController : MonoBehaviour {
 				isGrabbing = true;
 
 				//Player cannot slam while holding food
-				canSlam = false;
-
-				//Unless it's a ketchup or mustard packet
-				if (isGrabbing && (other.gameObject.name == "ketchup" || other.gameObject.name == "mustard")) {
-					canSlam = true;
-				} else {
-					canSlam = false;
-				}
+				//canSlam = false;
 
 				//turn off hand and turn on grabbingHand
 				defaultHand.SetActive (false);
@@ -139,11 +130,21 @@ public class playerController : MonoBehaviour {
 
 		}
 
+		if (other.CompareTag ("Sauce")) {
+			
+			if (isGrabbing) {
+				canSlam = true;
+			} else {
+				canSlam = false;
+				isSlamming = false;
+			}
+		}
+
 	}
 
 	void OnTriggerExit(Collider other){
 
-		if (other.tag == "Food") {
+		if (other.tag == "Food" || other.CompareTag("Sauce")) {
 			nearFood = false;
 
 		}
@@ -155,7 +156,10 @@ public class playerController : MonoBehaviour {
 
 			if (player.GetButtonDown ("Action2") && !isSlamming) { //add check for Y position before slamming
 
+				//Debug.Log ("isSlamming " + isSlamming);
+
 				isSlamming = true;
+
 				audio.PlayOneShot (slam);
 
 //				Debug.Log ("slam now " + isSlamming);
